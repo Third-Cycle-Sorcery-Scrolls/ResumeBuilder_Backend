@@ -6,7 +6,7 @@
     $password = getenv('DB_PASS') ?? '';
 
     try{
-        $conn = new PDO("mysql:host=$host;port=$port;dbname=$db", $user, $pass);
+        $conn = new PDO("mysql:host=$host;port=$port;dbname=$db", $user, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         echo "DB connected successfully";
     }catch(PDOException $e){
