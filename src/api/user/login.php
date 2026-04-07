@@ -13,8 +13,7 @@
         }
         // Check if the user is registered(email already exists)
         $stmt = $conn->prepare("SELECT id, email, password FROM users WHERE email = ?");
-        $stmt->execute([$email]);
-
+        $stmt->bindParam("s", $email);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$user || !password_verify($password, $user['password'])){
             jsonResponse(400, false, "Invalid credentials!", null, "Email or password is incorrect.");
