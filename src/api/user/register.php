@@ -1,5 +1,7 @@
 <?php
     // Importing db connection and response helper
+    require_once __DIR__ . '/../../config/db.php';
+    require_once __DIR__ . '/../../helpers/response.php';
 
     require_once './../../config/db.php';
     require_once './../../helpers/response.php';
@@ -12,6 +14,11 @@
         if (!$email || !$password){
             jsonResponse(400, false, "Email and password are required!", null, "Credentials are not provided fully.");
         }
+
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+            jsonResponse(400, false, "Invalid email format!", null, "The provided email does not match a valid format.");
+        }
+
         // Check if the user is registered(email already exists)
         $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->execute([$email]);
@@ -24,8 +31,12 @@
 
         $stmt = $conn->prepare("INSERT INTO users (email, password) VALUES (?, ?)");
         $stmt->execute([$email, $passwordHash]);
+        $userId = $conn->lastInsertId();
 
-        jsonResponse(201, true, "User registered successfully");
+        jsonResponse(201, true, "User registered successfully",[
+            "userId" => $userId,
+            "email" => $email
+        ]);
 
     }
     else{

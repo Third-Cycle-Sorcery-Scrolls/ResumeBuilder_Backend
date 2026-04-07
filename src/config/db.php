@@ -3,10 +3,13 @@
     $port = getenv('DB_PORT') ?? 3306;
     $db = getenv('DB_NAME') ?? 'resume_builder';
     $user = getenv('DB_USER') ?? 'root';
-    $password = getenv('DB_PASS') ?? '';
+    $password = getenv('DB_PASS') ?? 'root';
+
+    if (!$user) $user = 'root';
+    if ($password === false) $password = '';
 
     try{
-        $conn = new PDO("mysql:host=$host;port=$port;dbname=$db", $user, $pass);
+        $conn = new PDO("mysql:host=$host;port=$port;dbname=$db", $user, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         echo "DB connected successfully";
     }catch(PDOException $e){
