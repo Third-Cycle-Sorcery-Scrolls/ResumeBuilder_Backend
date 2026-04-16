@@ -3,27 +3,37 @@
         private $conn;
         private $table = 'users';
 
-        public $id;
-        public $email;
-        public $password;
-        public $name;
-        public $profile_picture;
+        private $id;
+        private $email;
+        private $password;
+        private $username;
+        private $profile_picture;
 
-        public function __construct($conn){
-            $this->conn = $conn;
+        public function __construct($db){
+            $this->conn = $db;
         }
 
-        public function create(){
-            $query = "INSERT INTO " . $this->table . "(email, password) VALUES (:email, :password)";
-            $stmt = $this->conn->prepare($query);
+        public function findById($id){
+            $stmt = $this->conn->prepare("SELECT * FROM users WHERE id = :id");
+            $stmt->execute([':id' => $id]);
+            $data = $stmt->fetch();
 
-            $this->password = password_hash($this->password, PASSWORD_BCRYPT);
-
-            return $stmt->execute([
-                ':email' => $this->email,
-                ':password' => $this->password
-            ]);
+            if($data){
+                $this->id = $data['id'];
+                $this->email = $data['email'];
+                $this->password = $data['password'];
+                $this->username = $data['name'];
+                $this->profile_picture = $data['profile_picture'];
+                return $this;
+            }
+            return null;
         }
+
+        public function getUsername() {return $this->username;}
+        public function getEmail() {return $this->email;}
+
+        public function setUsername($username) {$this->username = $username;}
+        public function setEmail($email) {$this->email = $email;}
     }
 
 ?>

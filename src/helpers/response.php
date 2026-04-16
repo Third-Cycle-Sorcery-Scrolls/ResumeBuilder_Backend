@@ -8,7 +8,7 @@
             "data" => $data,
             "error" => $error
         ]);
-        exit;
+        exit();
     }
     function get_env_value($key, $default = null) {
     // In a real setup, you'd use a library, but for a school project, 

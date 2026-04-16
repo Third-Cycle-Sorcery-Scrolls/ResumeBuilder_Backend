@@ -5,23 +5,37 @@
     header('Content-Type: application/json');
 
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
-        $email = $_POST['email'] ?? null;
-        $password = $_POST['password'] ?? null;
+        $email = trim($_POST['email']) ?? null;
+        $password = trim($_POST['password']) ?? null;
 
         if (!$email || !$password){
             jsonResponse(400, false, "Email and password are required!", null, "Credentials are not provided fully.");
         }
+
+        // Sanitize email
+        $email = htmlspecialchars($email);
+
         // Check if the user is registered(email already exists)
-        $stmt = $conn->prepare("SELECT id, email, password FROM users WHERE email = ?");
-        $stmt->execute([$email]);
+        $stmt = $conn->prepare("SELECT id, username, email, password FROM users WHERE email = :email");
+        $stmt->execute([':email' => $email]);
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$user || !password_verify($password, $user['password'])){
-            jsonResponse(400, false, "Invalid credentials!", null, "Email or password is incorrect.");
+        if(!$user){
+            jsonResponse(401, false, "Invalid credentials!", null, "Email or password is incorrect.");
         }
+        if (!password_verify($password, $user['password'])){
+            jsonResponse(401, false, "Invalid credentials!", null, "Email or password is incorrect.");
+        }
+
+        $token = bin2hex(random_bytes(32)); // Generate a random token (for demo)
+
         jsonResponse(200, true, "Login successful", [
-            "userId" => $user['id'],
-            "email" => $user['email'],
+            'user' => [
+                "id" => $user['id'],
+                "username" => $user['username'],
+                "email" => $user['email'],
+            ],
+            'token' => $token,
         ]);
 
     }else{
