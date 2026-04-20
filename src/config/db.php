@@ -3,7 +3,7 @@
     $port = getenv('DB_PORT') ?? 3306;
     $db = getenv('DB_NAME') ?? 'resume_builder';
     $user = getenv('DB_USER') ?? 'root';
-    $password = getenv('DB_PASS') ?? 'root';
+    $password = getenv('DB_PASS') ?? '';
 
     if (!$user) $user = 'root';
     if ($password === false) $password = '';
