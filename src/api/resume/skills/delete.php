@@ -1,8 +1,11 @@
 <?php
 
-require_once "../../../config/db.php";
-require_once "../../../models/Skill.php";
-require_once "../../../helpers/response.php";
+define('BASE_PATH', dirname(__DIR__, 3));
+
+require_once BASE_PATH . '/config/db.php';
+require_once BASE_PATH . '/models/Skill.php';
+require_once BASE_PATH . '/helpers/response.php';
+require_once BASE_PATH . '/helpers/logger.php';
 
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
@@ -42,14 +45,43 @@ $stmt->execute([
 ]);
 
 if (!$stmt->fetch()) {
+
+    logError(
+        $conn,
+        "Unauthorized delete attempt for skill_id=$id by user_id=$user_id"
+    );
+
     jsonResponse(403, false, "You do not have permission to delete this skill");
 }
 
 // Delete skill
 $skill = new Skill($conn);
 
-if ($skill->delete($id)) {
-    jsonResponse(200, true, "Skill deleted successfully");
-} else {
-    jsonResponse(500, false, "Could not delete skill");
+try {
+
+    if ($skill->delete($id)) {
+
+        jsonResponse(200, true, "Skill deleted successfully");
+
+    } else {
+
+        logError(
+            $conn,
+            "Skill delete failed for skill_id=$id"
+        );
+
+        jsonResponse(500, false, "Could not delete skill");
+    }
+
+} catch (Exception $e) {
+
+    logError(
+        $conn,
+        $e->getMessage(),
+        $e->getFile(),
+        $e->getLine(),
+        $user_id
+    );
+
+    jsonResponse(500, false, "Internal Server Error");
 }

@@ -13,14 +13,14 @@
     function get_env_value($key, $default = null) {
     // In a real setup, you'd use a library, but for a school project, 
     // you can define them here or use a simple parser.
-    $env = parse_ini_file('.env'); 
+    // $env = parse_ini_file('.env'); 
     return $env[$key] ?? $default;
 }
 
 $host = get_env_value('DB_HOST', 'localhost');
-$db   = get_env_value('DB_NAME', 'resume_db');
+$db   = get_env_value('DB_NAME', 'resume_builder');
 $user = get_env_value('DB_USER', 'root');
-$pass = get_env_value('DB_PASS', 'root');
+$pass = get_env_value('DB_PASS', '');
 $port = get_env_value('DB_PORT', '3306');
 
 try {

@@ -1,7 +1,11 @@
 <?php
-require_once "../../config/db.php";
-require_once "../../models/Skill.php";
-require_once "../../helpers/response.php";
+
+define('BASE_PATH', dirname(__DIR__, 3));
+
+require_once BASE_PATH . '/config/db.php';
+require_once BASE_PATH . '/models/Skill.php';
+require_once BASE_PATH . '/helpers/response.php';
+require_once BASE_PATH . '/helpers/logger.php';
 
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
@@ -34,6 +38,7 @@ if (!isset($resume_id, $skill_name, $proficiency) ||
 
 // Ownership check (future-ready)
 $user_id = getCurrentUserId();
+logError($conn, "DEBUG: resume_id=$resume_id, user_id=$user_id");
 
 $stmt = $conn->prepare("SELECT id FROM resumes WHERE id = :id AND user_id = :user_id");
 $stmt->execute([
@@ -42,15 +47,29 @@ $stmt->execute([
 ]);
 
 if (!$stmt->fetch()) {
+
+    logError($conn, "Unauthorized access attempt: user=$user_id, resume_id=$resume_id");
+
     jsonResponse(403, false, "You do not have permission to modify this resume");
 }
 
 // Add skill
 $skill = new Skill($conn);
 
-if ($skill->add($resume_id, $skill_name, $proficiency)) {
-    jsonResponse(201, true, "Skill added successfully");
-} else {
-    jsonResponse(500, false, "Could not add skill");
+try {
+    if ($skill->add($resume_id, $skill_name, $proficiency)) {
+        jsonResponse(201, true, "Skill added successfully");
+    } else {
+
+        logError($conn, "Skill insert failed (unknown reason)");
+
+        jsonResponse(500, false, "Could not add skill");
+    }
+
+} catch (Exception $e) {
+
+    logError($conn, $e->getMessage(), $e->getFile(), $e->getLine(), $user_id);
+
+    jsonResponse(500, false, "Internal Server Error");
 }
 

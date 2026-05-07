@@ -1,8 +1,11 @@
 <?php
 
-require_once "../../../config/db.php";
-require_once "../../../models/Skill.php";
-require_once "../../../helpers/response.php";
+define('BASE_PATH', dirname(__DIR__, 3));
+
+require_once BASE_PATH . '/config/db.php';
+require_once BASE_PATH . '/models/Skill.php';
+require_once BASE_PATH . '/helpers/response.php';
+require_once BASE_PATH . '/helpers/logger.php';
 
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
@@ -59,14 +62,43 @@ $stmt->execute([
 ]);
 
 if (!$stmt->fetch()) {
+
+    logError(
+        $conn,
+        "Unauthorized update attempt for skill_id=$id by user_id=$user_id"
+    );
+
     jsonResponse(403, false, "You do not have permission to update this skill");
 }
 
 // Update skill
 $skill = new Skill($conn);
 
-if ($skill->update($id, $skill_name, $proficiency)) {
-    jsonResponse(200, true, "Skill updated successfully");
-} else {
-    jsonResponse(500, false, "Could not update skill");
+try {
+
+    if ($skill->update($id, $skill_name, $proficiency)) {
+
+        jsonResponse(200, true, "Skill updated successfully");
+
+    } else {
+
+        logError(
+            $conn,
+            "Skill update failed for skill_id=$id"
+        );
+
+        jsonResponse(500, false, "Could not update skill");
+    }
+    
+} catch (Exception $e) {
+    
+    logError(
+        $conn,
+        $e->getMessage(),
+        $e->getFile(),
+        $e->getLine(),
+        $user_id
+    );
+
+    jsonResponse(500, false, "Internal Server Error");
 }
