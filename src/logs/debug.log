@@ -1,0 +1,778 @@
+
+==============================
+[2026-05-18 06:16:13] POST request in /api/resume/resume.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 06:16:13] POST request in /api/resume/skills/add.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 06:16:15] GET request in /api/resume/resume.php by user ID: 11
+Array
+(
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 06:16:18] DELETE request in /api/resume/resume.php by ID: 76
+
+==============================
+
+==============================
+[2026-05-18 06:18:16] POST request in /api/resume/resume.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 06:18:17] POST request in /api/resume/skills/add.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 06:18:19] GET request in /api/resume/resume.php by user ID: 11
+Array
+(
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 06:18:22] GET request in /api/resume/resume.php
+Array
+(
+    [resume_id] => 77
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 06:18:58] PUT request in /api/resume/resume.php for resume ID: 
+
+==============================
+
+==============================
+[2026-05-18 06:21:30] PUT request in /api/resume/resume.php for resume ID: 
+
+==============================
+
+==============================
+[2026-05-18 06:21:30] PUT request in /api/resume/skills/add.php
+
+==============================
+
+==============================
+[2026-05-18 06:22:48] PUT request in /api/resume/resume.php for resume ID: 
+
+==============================
+
+==============================
+[2026-05-18 06:22:48] PUT request in /api/resume/skills/add.php for resume ID: 77
+Array
+(
+    [0] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [1] => Array
+        (
+            [name] => 
+            [proficiency] => 70
+        )
+
+    [2] => Array
+        (
+            [name] => 
+            [proficiency] => 85
+        )
+
+    [3] => Array
+        (
+            [name] => 
+            [proficiency] => 75
+        )
+
+    [4] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [5] => Array
+        (
+            [name] => 
+            [proficiency] => 85
+        )
+
+    [6] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [7] => Array
+        (
+            [name] => 
+            [proficiency] => 70
+        )
+
+)
+
+==============================
+
+==============================
+[2026-05-18 06:24:43] PUT request in /api/resume/resume.php for resume ID: 
+
+==============================
+
+==============================
+[2026-05-18 06:24:43] PUT request in /api/resume/skills/add.php for resume ID: 77
+Array
+(
+    [0] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [1] => Array
+        (
+            [name] => 
+            [proficiency] => 70
+        )
+
+    [2] => Array
+        (
+            [name] => 
+            [proficiency] => 85
+        )
+
+    [3] => Array
+        (
+            [name] => 
+            [proficiency] => 75
+        )
+
+    [4] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [5] => Array
+        (
+            [name] => 
+            [proficiency] => 85
+        )
+
+    [6] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [7] => Array
+        (
+            [name] => 
+            [proficiency] => 70
+        )
+
+)
+
+==============================
+
+==============================
+[2026-05-18 06:25:08] PUT request in /api/resume/resume.php for resume ID: 
+
+==============================
+
+==============================
+[2026-05-18 06:25:08] PUT request in /api/resume/skills/add.php for resume ID: 77
+Array
+(
+    [0] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [1] => Array
+        (
+            [name] => 
+            [proficiency] => 70
+        )
+
+    [2] => Array
+        (
+            [name] => 
+            [proficiency] => 85
+        )
+
+    [3] => Array
+        (
+            [name] => 
+            [proficiency] => 75
+        )
+
+    [4] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [5] => Array
+        (
+            [name] => 
+            [proficiency] => 85
+        )
+
+    [6] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [7] => Array
+        (
+            [name] => 
+            [proficiency] => 70
+        )
+
+)
+
+==============================
+
+==============================
+[2026-05-18 06:26:08] PUT request in /api/resume/resume.php for resume ID: 
+
+==============================
+
+==============================
+[2026-05-18 06:26:08] PUT request in /api/resume/skills/add.php for resume ID: 77
+Array
+(
+    [0] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [1] => Array
+        (
+            [name] => 
+            [proficiency] => 70
+        )
+
+    [2] => Array
+        (
+            [name] => 
+            [proficiency] => 85
+        )
+
+    [3] => Array
+        (
+            [name] => 
+            [proficiency] => 75
+        )
+
+    [4] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [5] => Array
+        (
+            [name] => 
+            [proficiency] => 85
+        )
+
+    [6] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [7] => Array
+        (
+            [name] => 
+            [proficiency] => 70
+        )
+
+)
+
+==============================
+
+==============================
+[2026-05-18 06:33:53] PUT request in /api/resume/resume.php for resume ID: 
+
+==============================
+
+==============================
+[2026-05-18 06:33:53] PUT request in /api/resume/skills/add.php for resume ID: 77
+Array
+(
+    [0] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [1] => Array
+        (
+            [name] => 
+            [proficiency] => 70
+        )
+
+    [2] => Array
+        (
+            [name] => 
+            [proficiency] => 85
+        )
+
+    [3] => Array
+        (
+            [name] => 
+            [proficiency] => 75
+        )
+
+    [4] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [5] => Array
+        (
+            [name] => 
+            [proficiency] => 85
+        )
+
+    [6] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [7] => Array
+        (
+            [name] => 
+            [proficiency] => 70
+        )
+
+)
+
+==============================
+
+==============================
+[2026-05-18 06:35:14] PUT request in /api/resume/resume.php for resume ID: 
+
+==============================
+
+==============================
+[2026-05-18 06:35:14] PUT request in /api/resume/skills/add.php for resume ID: 77
+Array
+(
+    [0] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [1] => Array
+        (
+            [name] => 
+            [proficiency] => 70
+        )
+
+    [2] => Array
+        (
+            [name] => 
+            [proficiency] => 85
+        )
+
+    [3] => Array
+        (
+            [name] => 
+            [proficiency] => 75
+        )
+
+    [4] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [5] => Array
+        (
+            [name] => 
+            [proficiency] => 85
+        )
+
+    [6] => Array
+        (
+            [name] => 
+            [proficiency] => 80
+        )
+
+    [7] => Array
+        (
+            [name] => 
+            [proficiency] => 70
+        )
+
+)
+
+==============================
+
+==============================
+[2026-05-18 06:37:40] GET request in /api/resume/resume.php
+Array
+(
+    [resume_id] => 77
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 06:37:52] PUT request in /api/resume/resume.php for resume ID: 
+
+==============================
+
+==============================
+[2026-05-18 06:37:52] PUT request in /api/resume/skills/add.php for resume ID: 77
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 06:40:01] PUT request in /api/resume/resume.php for resume ID: 
+
+==============================
+
+==============================
+[2026-05-18 06:40:01] PUT request in /api/resume/skills/add.php for resume ID: 77
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 06:40:50] PUT request in /api/resume/resume.php for resume ID: 
+
+==============================
+
+==============================
+[2026-05-18 06:40:50] PUT request in /api/resume/skills/add.php for resume ID: 77
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 06:40:50] PUT request in /api/resume/education/index.php for ID: 77
+Array
+(
+    [0] => Array
+        (
+            [id] => 35
+            [institution] => Addis Ababa University
+            [degree] => Bachelor of Science
+            [fieldOfStudy] => Computer Science
+            [startDate] => 2019-09-01
+            [endDate] => 2023-07-01
+            [description] => 
+        )
+
+    [1] => Array
+        (
+            [id] => 36
+            [institution] => Coursera
+            [degree] => Professional Certificate
+            [fieldOfStudy] => Backend Development
+            [startDate] => 2023-08-01
+            [endDate] => 2024-02-01
+            [description] => 
+        )
+
+)
+
+==============================
+
+==============================
+[2026-05-18 06:46:01] PUT request in /api/resume/resume.php for resume ID: 
+
+==============================
+
+==============================
+[2026-05-18 06:46:01] PUT request in /api/resume/skills/add.php for resume ID: 77
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 06:46:01] PUT request in /api/resume/education/index.php for ID: 77
+Array
+(
+    [0] => Array
+        (
+            [id] => 35
+            [institution] => Addis Ababa University
+            [degree] => Bachelor of Science
+            [fieldOfStudy] => Computer Science
+            [startDate] => 2019-09-01
+            [endDate] => 2023-07-01
+            [description] => 
+        )
+
+    [1] => Array
+        (
+            [id] => 36
+            [institution] => Coursera
+            [degree] => Professional Certificate
+            [fieldOfStudy] => Backend Development
+            [startDate] => 2023-08-01
+            [endDate] => 2024-02-01
+            [description] => 
+        )
+
+)
+
+==============================
+
+==============================
+[2026-05-18 06:54:23] PUT request in /api/resume/resume.php for resume ID: 
+
+==============================
+
+==============================
+[2026-05-18 06:54:23] PUT request in /api/resume/skills/add.php for resume ID: 77
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 06:54:23] PUT request in /api/resume/education/index.php for ID: 77
+Array
+(
+    [0] => Array
+        (
+            [id] => 35
+            [institution] => Addis Ababa University
+            [degree] => Bachelor of Science
+            [fieldOfStudy] => Computer Science
+            [startDate] => 2019-09-01
+            [endDate] => 2023-07-01
+            [description] => 
+        )
+
+    [1] => Array
+        (
+            [id] => 36
+            [institution] => Coursera
+            [degree] => Professional Certificate
+            [fieldOfStudy] => Backend Development
+            [startDate] => 2023-08-01
+            [endDate] => 2024-02-01
+            [description] => 
+        )
+
+)
+
+==============================
+
+==============================
+[2026-05-18 06:57:13] PUT request in /api/resume/resume.php for resume ID: 
+
+==============================
+
+==============================
+[2026-05-18 06:57:13] PUT request in /api/resume/skills/add.php for resume ID: 77
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 06:57:13] PUT request in /api/resume/education/index.php for ID: 77
+Array
+(
+    [0] => Array
+        (
+            [id] => 35
+            [institution] => Addis Ababa University
+            [degree] => Bachelor of Science
+            [fieldOfStudy] => Computer Science
+            [startDate] => 2019-09-01
+            [endDate] => 2023-07-01
+            [description] => 
+        )
+
+    [1] => Array
+        (
+            [id] => 36
+            [institution] => Coursera
+            [degree] => Professional Certificate
+            [fieldOfStudy] => Backend Development
+            [startDate] => 2023-08-01
+            [endDate] => 2024-02-01
+            [description] => 
+        )
+
+)
+
+==============================
+
+==============================
+[2026-05-18 07:02:52] PUT request in /api/resume/resume.php for resume ID: 
+
+==============================
+
+==============================
+[2026-05-18 07:02:52] PUT request in /api/resume/skills/add.php for resume ID: 77
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 07:02:52] PUT request in /api/resume/education/index.php for ID: 77
+Array
+(
+    [0] => Array
+        (
+            [id] => 35
+            [institution] => Addis Ababa University
+            [degree] => Bachelor of Science
+            [fieldOfStudy] => Computer Science
+            [startDate] => 2019-09-01
+            [endDate] => 2023-07-01
+            [description] => 
+        )
+
+    [1] => Array
+        (
+            [id] => 36
+            [institution] => Coursera
+            [degree] => Professional Certificate
+            [fieldOfStudy] => Backend Development
+            [startDate] => 2023-08-01
+            [endDate] => 2024-02-01
+            [description] => 
+        )
+
+)
+
+==============================
+
+==============================
+[2026-05-18 07:02:52] Education update failure count: 0
+
+==============================
+
+==============================
+[2026-05-18 07:02:56] GET request in /api/resume/resume.php by user ID: 11
+Array
+(
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 07:03:03] GET request in /api/resume/resume.php
+Array
+(
+    [resume_id] => 77
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 07:03:14] PUT request in /api/resume/resume.php for resume ID: 
+
+==============================
+
+==============================
+[2026-05-18 07:03:14] PUT request in /api/resume/skills/add.php for resume ID: 77
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 07:03:14] PUT request in /api/resume/education/index.php for ID: 77
+Array
+(
+    [0] => Array
+        (
+            [id] => 35
+            [institution] => Addis Ababa University
+            [degree] => Bachelor of Science
+            [fieldOfStudy] => Computer Science
+            [startDate] => 2019-09-01
+            [endDate] => 2023-07-01
+            [description] => 
+        )
+
+    [1] => Array
+        (
+            [id] => 36
+            [institution] => Coursera
+            [degree] => Professional Certificate
+            [fieldOfStudy] => Backend Development
+            [startDate] => 2023-08-01
+            [endDate] => 2024-02-01
+            [description] => 
+        )
+
+)
+
+==============================
+
+==============================
+[2026-05-18 07:03:14] Education update failure count: 0
+
+==============================
+
+==============================
+[2026-05-18 07:03:17] GET request in /api/resume/resume.php by user ID: 11
+Array
+(
+    [user_id] => 11
+)
+
+==============================

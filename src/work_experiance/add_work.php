@@ -1,60 +1,145 @@
 <?php
-// 1. Include the central DB connection and the response helper
-
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-require_once __DIR__ . '/../config/db.php'; 
-// echo "";
-// exit;
-require_once __DIR__ . '../helpers/response.php';
 
-try {
-    // Check if the request is a POST
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        
-        // 2. Collect data (Using your $pdo from db.php)
-        $resume_id = 1; 
-        $company = $_POST['company_name'] ?? '';
-        $title = $_POST['job_title'] ?? '';
-        $start = $_POST['start_date'] ?? '';
-        $end = $_POST['end_date'] ?? null; 
-        $desc = $_POST['description'] ?? '';
+require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../helpers/response.php';
 
-        // 3. Validation using your helper
-        if (empty($company) || empty($title)) {
-            // Arguments: HTTP Code, Success, Message
-            jsonResponse(400, false, "Company and Title are required!");
+// CORS
+header("Access-Control-Allow-Origin: http://localhost:3000");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Credentials: true");
+header("Content-Type: application/json");
+
+// Preflight
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    try {
+    
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            jsonResponse(405, false, "Method Not Allowed");
+            exit();
         }
-
-        // 4. Prepare SQL
-        $sql = "INSERT INTO work_experience (resume_id, company_name, job_title, start_date, end_date, description) 
-                VALUES (:rid, :comp, :title, :start, :end, :desc)";
-        
-        $stmt = $pdo->prepare($sql);
-        
-        // 5. Execute
-        $stmt->execute([
-            ':rid'   => $resume_id,
-            ':comp'  => $company,
-            ':title' => $title,
-            ':start' => $start,
-            ':end'   => $end,
-            ':desc'  => $desc
-        ]);
-
-        // 6. Success Response
+    
+    
+        $data = json_decode(file_get_contents("php://input"), true);
+        // var_dump(json_encode($data));
+    
+        $resume_id = $data['resume_id'] ?? null;
+        $experience = $data['experience'] ?? [];
+    
+        if (!$resume_id) {
+            jsonResponse(400, false, "resume_id is required");
+            exit();
+        }
+    
+        if (empty($experience)) {
+            jsonResponse(400, false, "Experience data is required");
+            exit();
+        }
+    
+        $conn->beginTransaction();
+    
+        $sql = "INSERT INTO work_experience 
+            (resume_id, company, position, description) 
+            VALUES (:rid, :comp, :title, :desc)";
+    
+        $stmt = $conn->prepare($sql);
+    
+        $insertedIds = [];
+    
+        foreach ($experience as $exp) {
+    
+            $success = $stmt->execute([
+                ':rid'   => $resume_id,
+                ':comp'  => $exp['company'] ?? null,
+                ':title' => $exp['position'] ?? null,
+                ':desc'  => $exp['description'] ?? null
+            ]);
+    
+            if (!$success) {
+                $conn->rollBack(); 
+                jsonResponse(500, false, "Failed to insert experience");
+                exit();
+            }
+    
+            $insertedIds[] = $conn->lastInsertId();
+        }
+    
+        $conn->commit();
+    
         jsonResponse(201, true, "Work experience saved successfully!", [
-            "inserted_id" => $pdo->lastInsertId()
+            "inserted_ids" => $insertedIds
         ]);
-        
-    } else {
-        // Handle non-POST requests
-        jsonResponse(405, false, "Method Not Allowed");
+        exit();
+    
+    } catch (PDOException $e) {
+    
+        if ($conn->inTransaction()) {
+            $conn->rollBack();
+        }
+    
+        jsonResponse(500, false, "Database error", null, $e->getMessage());
+        exit();
     }
 
-} catch(PDOException $e) {
-    // Database error response
-    jsonResponse(500, false, "Database error", null, $e->getMessage());
+} else if ($_SERVER['REQUEST_METHOD'] === "PUT") {
+    // Handle updates to work experience 
+    $data = json_decode(file_get_contents("php://input"), true);
+    $resume_id = $data['resume_id'] ?? null;
+    if (!$resume_id) {
+        jsonResponse(400, false, "resume_id is required for update");
+        exit();
+    }
+    $experience = $data['experience'] ?? [];
+    if (empty($experience)) {
+        jsonResponse(400, false, "Experience data is required for update");
+        exit();
+    }
+    $conn->beginTransaction();
+    try {
+        $sql = "UPDATE work_experience 
+                SET company = :comp, position = :title, description = :desc 
+                WHERE id = :id AND resume_id = :rid";
+        $stmt = $conn->prepare($sql);
+        foreach ($experience as $exp) {
+            $id = $exp['id'] ?? null;
+            if (!$id) {
+                $conn->rollBack();
+                jsonResponse(400, false, "Each experience entry must have an ID for update");
+                exit();
+            }
+            $success = $stmt->execute([
+                ':id'    => $id,
+                ':rid'   => $resume_id,
+                ':comp'  => $exp['company'] ?? null,
+                ':title' => $exp['position'] ?? null,
+                ':desc'  => $exp['description'] ?? null
+            ]);
+            if (!$success) {
+                $conn->rollBack();
+                jsonResponse(500, false, "Failed to update experience with ID: $id");
+                exit();
+            }
+        }
+        $conn->commit();
+        jsonResponse(200, true, "Work experience updated successfully!");
+        exit();
+    } catch (PDOException $e) {
+        if ($conn->inTransaction()) {
+            $conn->rollBack();
+        }
+        jsonResponse(500, false, "Database error during update", null, $e->getMessage());
+        exit();
+    }
 }
-?>
+
+else {
+    jsonResponse(405, false, "Method Not Allowed");
+    exit();
+}

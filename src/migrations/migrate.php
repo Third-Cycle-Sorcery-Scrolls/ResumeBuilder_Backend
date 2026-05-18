@@ -2,9 +2,9 @@
 
 function up(PDO $pdo)
 {
-    // USERS
+    // USERS if not exists
     $pdo->exec("
-        CREATE TABLE users (
+        CREATE TABLE IF NOT EXISTS users (
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255),
             email VARCHAR(255) UNIQUE,
@@ -14,10 +14,29 @@ function up(PDO $pdo)
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );
     ");
+    //role field for user roles like admin, regular user etc. default to regular "user"
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'role'
+    ");
+    $stmt->execute();
+    $exists = $stmt->fetchColumn();
+    if (!$exists) {
+        $pdo->exec("ALTER TABLE users ADD COLUMN role VARCHAR(50) DEFAULT 'user'");
+    }
+
+    //insert admin@gmail user if not exists with password pass123 (hashed) and role admin
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = 'admin@gmail.com'");
+    $stmt->execute();
+    $adminExists = $stmt->fetchColumn();
+    if (!$adminExists) {
+        $pdo->exec("INSERT INTO users (name, email, password, role) VALUES ('Admin', 'admin@gmail.com', '" . password_hash('pass123', PASSWORD_DEFAULT) . "', 'admin')");
+    }
+
 
     // RESUMES
     $pdo->exec("
-        CREATE TABLE resumes (
+        CREATE TABLE IF NOT EXISTS resumes (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT,
             title VARCHAR(255),
@@ -27,10 +46,38 @@ function up(PDO $pdo)
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         );
     ");
+    //personal info for each resume
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS personal_info (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            resume_id INT,
+            full_name VARCHAR(255),
+            email VARCHAR(255),
+            phone VARCHAR(255),
+            address VARCHAR(255),
+            photo_url VARCHAR(255),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            FOREIGN KEY (resume_id) REFERENCES resumes(id) ON DELETE CASCADE
+        );
+    ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS projects (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            resume_id INT,
+            title VARCHAR(255),
+            description TEXT,
+            link VARCHAR(255),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            FOREIGN KEY (resume_id) REFERENCES resumes(id) ON DELETE CASCADE
+        );
+    ");
 
     // EDUCATION
     $pdo->exec("
-        CREATE TABLE education (
+        CREATE TABLE IF NOT EXISTS education (
             id INT AUTO_INCREMENT PRIMARY KEY,
             resume_id INT,
             institution VARCHAR(255),
@@ -43,10 +90,22 @@ function up(PDO $pdo)
             FOREIGN KEY (resume_id) REFERENCES resumes(id) ON DELETE CASCADE
         );
     ");
+    //add description field once to education table for additional details about the education entry
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'education' AND COLUMN_NAME = 'description'
+    ");
+    $stmt->execute();
+    $exists = $stmt->fetchColumn();
+    if (!$exists) {
+        $pdo->exec("ALTER TABLE education ADD COLUMN description TEXT");
+        }
+    
+
 
     // WORK EXPERIENCE
     $pdo->exec("
-        CREATE TABLE work_experience (
+        CREATE TABLE IF NOT EXISTS work_experience (
             id INT AUTO_INCREMENT PRIMARY KEY,
             resume_id INT,
             company VARCHAR(255),
@@ -62,7 +121,7 @@ function up(PDO $pdo)
 
     // SKILLS
     $pdo->exec("
-        CREATE TABLE skills (
+        CREATE TABLE IF NOT EXISTS skills (
             id INT AUTO_INCREMENT PRIMARY KEY,
             resume_id INT,
             skill_name VARCHAR(255),
@@ -74,4 +133,5 @@ function up(PDO $pdo)
     ");
 
     echo "Migration done \n";
+
 }

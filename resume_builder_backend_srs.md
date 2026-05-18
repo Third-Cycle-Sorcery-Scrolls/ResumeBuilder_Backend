@@ -35,14 +35,18 @@ The Resume Builder project aims to create a web application that allows users to
    - FR-6: Users can view a list of their created resumes.
    - FR-7: Users can edit and update their existing resumes.
    - FR-8: Users can delete their resumes.
-5. 3. **Education, work experiance, skills sections management**:
+5. 2.1. **personal information management for each resume**:
+   - FR-5.1: Users can add, edit, and delete personal information (name, email,address,phone) for each resume.
+6. 2.2 **Project management for each resume**:
+   - FR-5.2: Users can add, edit, and delete project entries (description,link,title) for each resume.
+7. 3. **Education, work experiance, skills sections management**:
    - FR-9: Users can add, edit, and delete entries in the education section of their resume.
    - FR-10: Users can add, edit, and delete entries in the work experience section of their resume.
    - FR-11: Users can add, edit, and delete entries in the skills section of their resume.
-6. 4. **Resume Templates**:
+8. 4. **Resume Templates**:
    - FR-12: Users can choose from a selection of predefined resume templates when creating or editing their resumes.
    - FR-13: Users can preview their resume in the selected template before downloading using their own data.
-7. 5. **Resume Download**:
+9. 5. **Resume Download**:
    - FR-14: Users can download their resume in PDF format.
 
 ## 5. Non-Functional Requirements
@@ -79,6 +83,24 @@ Endpoint                 Method       description
 /resume/{id}             DELETE       Delete a specific resume by ID
 /resume/upload-profile-picture POST         Upload a profile picture for the user (optional)
 
+```
+
+### Personal Information Management Endpoints
+
+```
+Endpoint                 Method       description
+/resume/personal_info.php POST         Add personal information to a specific resume
+/resume/personal_info.php PUT          Update personal information in a specific resume
+/resume/personal_info.php DELETE       Delete personal information from a specific resume
+```
+
+### project management endpoints
+
+```
+Endpoint                 Method       description
+/resume/project.php POST         Add a project entry to a specific resume
+/resume/project.php PUT          Update a project entry in a specific resume
+/resume/project.php DELETE       Delete a project entry from a specific resume
 ```
 
 ### Education, Work Experience, Skills Management Endpoints
@@ -126,6 +148,24 @@ Resumes Table:
 - template (VARCHAR(255)) -- template name or identifier for the resume like "template1", "template2", etc.
 - created_at (TIMESTAMP)
 - updated_at (TIMESTAMP)
+personal_info Table:
+- id (INT, PRIMARY KEY, AUTO_INCREMENT)
+- resume_id (INT, FOREIGN KEY referencing Resumes(id))
+- full_name (VARCHAR(255))
+- email (VARCHAR(255))
+- phone (VARCHAR(255))
+- address (VARCHAR(255))
+- created_at (TIMESTAMP)
+- updated_at (TIMESTAMP)
+- photo_url (VARCHAR(255)) (optional, URL or path to the uploaded profile picture)
+project Table:
+- id (INT, PRIMARY KEY, AUTO_INCREMENT)
+- resume_id (INT, FOREIGN KEY referencing Resumes(id))
+- title (VARCHAR(255))
+- description (TEXT)
+- link (VARCHAR(255))
+- created_at (TIMESTAMP)
+- updated_at (TIMESTAMP)
 Education Table:
 - id (INT, PRIMARY KEY, AUTO_INCREMENT)
 - resume_id (INT, FOREIGN KEY referencing Resumes(id))
@@ -136,6 +176,7 @@ Education Table:
 - end_date (DATE)
 - created_at (TIMESTAMP)
 - updated_at (TIMESTAMP)
+- description (TEXT) (optional, for additional details about the education entry)
 Work Experience Table:
 - id (INT, PRIMARY KEY, AUTO_INCREMENT)
 - resume_id (INT, FOREIGN KEY referencing Resumes(id))
