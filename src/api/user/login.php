@@ -1,6 +1,7 @@
 <?php
     require_once __DIR__  . '/../../config/db.php';
     require_once __DIR__ . '/../../helpers/response.php';
+    require_once __DIR__ . '/../../helpers/jwt-token.php';
 
     header('Content-Type: application/json');
 
@@ -16,7 +17,7 @@
         $email = htmlspecialchars($email);
 
         // Check if the user is registered(email already exists)
-        $stmt = $conn->prepare("SELECT id, username, email, password FROM users WHERE email = :email");
+        $stmt = $conn->prepare("SELECT id, username, email, password, role FROM users WHERE email = :email");
         $stmt->execute([':email' => $email]);
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -27,7 +28,12 @@
             jsonResponse(401, false, "Invalid credentials!", null, "Email or password is incorrect.");
         }
 
-        $token = bin2hex(random_bytes(32)); // Generate a random token (for demo)
+        $payload = [
+            'id' => $user['id'],
+            "email" => $user['email'],
+            'role' => $user['role']
+        ];
+        $token = generateToken($payload);
 
         jsonResponse(200, true, "Login successful", [
             'user' => [
