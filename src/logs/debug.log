@@ -776,3 +776,381 @@ Array
 )
 
 ==============================
+
+==============================
+[2026-05-18 09:05:30] User logged in: Array
+
+==============================
+
+==============================
+[2026-05-18 09:06:37] User logged in: admin@gmail.com
+Array
+(
+    [id] => 13
+    [email] => admin@gmail.com
+    [password] => $2y$10$jFjHPMuYwE1nLqkqo7c44u5aG.LtZcSUMTjghtPjO3CgBvM25Laze
+)
+
+==============================
+
+==============================
+[2026-05-18 09:07:21] User logged in: admin@gmail.com
+Array
+(
+    [id] => 13
+    [email] => admin@gmail.com
+    [password] => $2y$10$jFjHPMuYwE1nLqkqo7c44u5aG.LtZcSUMTjghtPjO3CgBvM25Laze
+    [role] => admin
+)
+
+==============================
+
+==============================
+[2026-05-18 09:09:50] User logged in: admin@gmail.com
+Array
+(
+    [id] => 13
+    [email] => admin@gmail.com
+    [password] => $2y$10$jFjHPMuYwE1nLqkqo7c44u5aG.LtZcSUMTjghtPjO3CgBvM25Laze
+    [role] => admin
+)
+
+==============================
+
+==============================
+[2026-05-18 09:10:19] User logged in: admin@gmail.com
+Array
+(
+    [id] => 13
+    [email] => admin@gmail.com
+    [password] => $2y$10$jFjHPMuYwE1nLqkqo7c44u5aG.LtZcSUMTjghtPjO3CgBvM25Laze
+    [role] => admin
+)
+
+==============================
+
+==============================
+[2026-05-18 09:11:36] User logged in: admin@gmail.com
+Array
+(
+    [id] => 13
+    [email] => admin@gmail.com
+    [password] => $2y$10$jFjHPMuYwE1nLqkqo7c44u5aG.LtZcSUMTjghtPjO3CgBvM25Laze
+    [role] => admin
+)
+
+==============================
+
+==============================
+[2026-05-18 09:12:39] User logged in: admin@gmail.com
+Array
+(
+    [id] => 13
+    [email] => admin@gmail.com
+    [password] => $2y$10$jFjHPMuYwE1nLqkqo7c44u5aG.LtZcSUMTjghtPjO3CgBvM25Laze
+    [role] => admin
+)
+
+==============================
+
+==============================
+[2026-05-18 09:13:44] User logged in: admin@gmail.com
+Array
+(
+    [id] => 13
+    [email] => admin@gmail.com
+    [password] => $2y$10$jFjHPMuYwE1nLqkqo7c44u5aG.LtZcSUMTjghtPjO3CgBvM25Laze
+    [role] => admin
+)
+
+==============================
+
+==============================
+[2026-05-18 09:16:51] User logged in: admin@gmail.com
+Array
+(
+    [id] => 13
+    [email] => admin@gmail.com
+    [password] => $2y$10$jFjHPMuYwE1nLqkqo7c44u5aG.LtZcSUMTjghtPjO3CgBvM25Laze
+    [role] => admin
+)
+
+==============================
+
+==============================
+[2026-05-18 10:21:09] GET request in /api/resume/resume.php by user ID: 13
+Array
+(
+    [user_id] => 13
+)
+
+==============================
+
+==============================
+[2026-05-18 10:22:09] GET request in /api/resume/resume.php by user ID: 13
+Array
+(
+    [user_id] => 13
+)
+
+==============================
+
+==============================
+[2026-05-18 10:23:53] User logged in: alex2@gmail.com
+Array
+(
+    [id] => 11
+    [email] => alex2@gmail.com
+    [password] => $2y$10$TaKBmhYxX8ANsw51Qp3jgONNyGCIM1QyV9kji11awCBQR1DJONWMa
+    [role] => user
+)
+
+==============================
+
+==============================
+[2026-05-18 10:35:51] GET request in /api/resume/resume.php by user ID: 11
+Array
+(
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 10:36:06] GET request in /api/resume/resume.php by user ID: 11
+Array
+(
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 10:43:06] GET request in /api/resume/resume.php by user ID: 11
+Array
+(
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 11:18:04] GET request in /api/resume/resume.php by user ID: 11
+Array
+(
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 11:18:09] GET request in /api/resume/resume.php
+Array
+(
+    [resume_id] => 77
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 11:18:16] GET request in /api/resume/resume.php by user ID: 11
+Array
+(
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 11:20:15] GET request in /api/resume/resume.php
+Array
+(
+    [resume_id] => 77
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 11:20:19] GET request in /api/resume/resume.php
+Array
+(
+    [resume_id] => 77
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 11:20:23] GET request in /api/resume/resume.php
+Array
+(
+    [resume_id] => 77
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 11:21:50] GET request in /api/resume/resume.php
+Array
+(
+    [resume_id] => 77
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 11:22:48] DELETE request in /api/resume/resume.php by ID: 77
+
+==============================
+
+==============================
+[2026-05-18 11:22:54] POST request in /api/resume/resume.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 11:22:54] POST request in /api/resume/skills/add.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 11:23:15] POST request in /api/resume/resume.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 11:23:15] POST request in /api/resume/skills/add.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 11:24:28] DELETE request in /api/resume/resume.php by ID: 79
+
+==============================
+
+==============================
+[2026-05-18 11:24:34] GET request in /api/resume/resume.php by user ID: 11
+Array
+(
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 11:25:36] User logged in: admin@gmail.com
+Array
+(
+    [id] => 13
+    [email] => admin@gmail.com
+    [password] => $2y$10$jFjHPMuYwE1nLqkqo7c44u5aG.LtZcSUMTjghtPjO3CgBvM25Laze
+    [role] => admin
+)
+
+==============================
+
+==============================
+[2026-05-18 11:36:49] User logged in: alex2@gmail.com
+Array
+(
+    [id] => 11
+    [email] => alex2@gmail.com
+    [password] => $2y$10$TaKBmhYxX8ANsw51Qp3jgONNyGCIM1QyV9kji11awCBQR1DJONWMa
+    [role] => user
+)
+
+==============================
+
+==============================
+[2026-05-18 11:41:26] User logged in: alex2@gmail.com
+Array
+(
+    [id] => 11
+    [email] => alex2@gmail.com
+    [password] => $2y$10$TaKBmhYxX8ANsw51Qp3jgONNyGCIM1QyV9kji11awCBQR1DJONWMa
+    [role] => user
+)
+
+==============================
+
+==============================
+[2026-05-18 11:49:47] User logged in: alex2@gmail.com
+Array
+(
+    [id] => 11
+    [email] => alex2@gmail.com
+    [password] => $2y$10$TaKBmhYxX8ANsw51Qp3jgONNyGCIM1QyV9kji11awCBQR1DJONWMa
+    [role] => user
+)
+
+==============================
+
+==============================
+[2026-05-18 11:50:42] POST request in /api/resume/resume.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 11:50:42] POST request in /api/resume/skills/add.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 11:53:16] POST request in /api/resume/resume.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 11:53:16] POST request in /api/resume/skills/add.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-18 11:57:19] GET request in /api/resume/resume.php
+Array
+(
+    [resume_id] => 78
+    [user_id] => 11
+)
+
+==============================
+
+==============================
+[2026-05-18 11:59:50] User logged in: admin@gmail.com
+Array
+(
+    [id] => 13
+    [email] => admin@gmail.com
+    [password] => $2y$10$jFjHPMuYwE1nLqkqo7c44u5aG.LtZcSUMTjghtPjO3CgBvM25Laze
+    [role] => admin
+)
+
+==============================

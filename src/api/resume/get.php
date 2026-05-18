@@ -30,7 +30,7 @@ if($_SERVER['REQUEST_METHOD'] == "GET" and isset($_GET['user_id'])){
 
    $resume = new Resume($conn);
 
-   $resume = $resume->getAllResumesByUserIdWithMetaData($user);
+   $resume = $resume->getAllResumeByUserId($user);
 
    jsonResponse(200, true, "Resumes fetched successfully", $resume);
 

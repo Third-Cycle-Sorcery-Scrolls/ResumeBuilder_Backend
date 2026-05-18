@@ -132,6 +132,22 @@ function up(PDO $pdo)
         );
     ");
 
+    // Log Table (for tracking user actions and system events):
+    // - id (INT, PRIMARY KEY, AUTO_INCREMENT)
+    // - user_id (INT, FOREIGN KEY referencing Users(id), nullable for system events)
+    // - action (VARCHAR(255)) -- description of the action performed (e.g., "User registered", "Resume created", "Resume updated", etc.)
+    // - timestamp (TIMESTAMP) -- when the action occurred
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS logs (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NULL,
+            action VARCHAR(255),
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+        );
+    ");
+
+
     echo "Migration done \n";
 
 }

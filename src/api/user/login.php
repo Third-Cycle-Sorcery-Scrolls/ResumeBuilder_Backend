@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__  . '/../../config/db.php';
 require_once __DIR__ . '/../../helpers/response.php';
+require_once __DIR__ . '/../../helpers/debug.php';
 
 // CORS
 header("Access-Control-Allow-Origin: http://localhost:3000");
@@ -34,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         jsonResponse(400, false, "Email and password are required!", null, "Missing fields");
     }
 
-    $stmt = $conn->prepare("SELECT id, email, password FROM users WHERE email = ?");
+    $stmt = $conn->prepare("SELECT id, email, password, role FROM users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -42,9 +43,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         jsonResponse(400, false, "Invalid credentials!", null, "Wrong email or password");
     }
 
+    debug("User logged in: " . $user['email'], $user);
+
     jsonResponse(200, true, "Login successful", [
         "userId" => $user['id'],
         "email" => $user['email'],
+        "role" => $user['role'] ?? 'user'
     ]);
 
 } else {

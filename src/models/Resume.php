@@ -252,6 +252,31 @@ class Resume
 
     return $response;
 }
+
+public function getAllResumeByUserId($user_id){
+    $stmt = $this->pdo->prepare("SELECT id, title,template,created_at,updated_at FROM resumes WHERE user_id = ?");
+    $stmt->execute([$user_id]);
+
+    #front expection scheme:-
+    // {
+    //   id: 2,
+    //   title: "Backend Developer Resume",
+    //   template: "Classic",
+    //   updated: "5 days ago",
+    // },
+
+    $resumes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $response = array_map(function($res){
+        return [
+            "id" => $res['id'],
+            "title" => $res['title'] ?? "Untitled Resume",
+            "template" => $res['template'] ?? "modern",
+            "updated" => $res['updated_at'],
+        ];
+    }, $resumes);
+    return $response;
+
+}
 }
 
 

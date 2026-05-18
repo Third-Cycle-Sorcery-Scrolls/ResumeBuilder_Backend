@@ -24,6 +24,20 @@
                 ':password' => $this->password
             ]);
         }
+
+        //analytics:- by user id
+        //total_resumes,last_updated,most used template
+        //
+        public function getAnalytics($userId) {
+            $query = "SELECT 
+                        (SELECT COUNT(*) FROM resumes WHERE user_id = :userId) AS total_resumes,
+                        (SELECT MAX(updated_at) FROM resumes WHERE user_id = :userId) AS last_updated,
+                        (SELECT template FROM resumes WHERE user_id = :userId GROUP BY template ORDER BY COUNT(*) DESC LIMIT 1) AS most_used_template
+                    ";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute([':userId' => $userId]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
     }
 
 ?>
