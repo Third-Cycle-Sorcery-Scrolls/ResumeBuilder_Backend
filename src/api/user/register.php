@@ -2,13 +2,16 @@
     // Importing db connection and response helper
     require_once __DIR__ . '/../../config/db.php';
     require_once __DIR__ . '/../../helpers/response.php';
+    require_once __DIR__ . '/../../models/User.php';
+
+    $user = new User($conn);
 
     header('Content-Type: application/json');
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-        $username = trim($_POST['username']) ?? null;
-        $email = trim($_POST['email']) ?? null;
-        $password = trim($_POST['password']) ?? null;
+        $username = isset($_POST['username']) ? trim($_POST['username']) : null;
+        $email = isset($_POST['email']) ? trim($_POST['email']) : null;
+        $password = isset($_POST['password']) ? trim($_POST['password']) : null;
 
         // Validate input
         if(!$username){
@@ -36,23 +39,14 @@
         $email = htmlspecialchars($email);
 
         // Check if the user is registered(email already exists)
-        $stmt = $conn->prepare("SELECT id FROM users WHERE username = :username OR email = :email");
-        $stmt->execute([':username' => $username,
-                        ':email'=> $email]);
-        if ($stmt->rowCount() > 0){
-            jsonResponse(400, false, "Username or email already exists!", null, "A user with this username/email already exists.");
-            exit;
+        if($user->findByEmailOrUsername($email, $username)){
+            jsonResponse(409, false, "User already exists!", null, "A user with the provided email or username already exists.");
         }
 
         // If it is a new user, hash the password and store it in the database
         $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 
-        $stmt = $conn->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
-        $result = $stmt->execute([':username' => $username,
-                        ':email' => $email,
-                        ':password' => $passwordHash]);
-        if($result){
-            $userId = $conn->lastInsertId();
+        if($user->create($username, $email, $passwordHash)){
             jsonResponse(201, true, "User registered successfully", [
                 "username" => $username,
                 "userId" => $userId,

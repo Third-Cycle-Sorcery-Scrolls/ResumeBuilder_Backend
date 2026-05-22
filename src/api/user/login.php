@@ -2,12 +2,13 @@
     require_once __DIR__  . '/../../config/db.php';
     require_once __DIR__ . '/../../helpers/response.php';
     require_once __DIR__ . '/../../helpers/jwt-token.php';
+    require_once __DIR__ . '/../../models/User.php';
 
     header('Content-Type: application/json');
 
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
-        $email = trim($_POST['email']) ?? null;
-        $password = trim($_POST['password']) ?? null;
+        $email = isset($_POST['email']) ? trim($_POST['email']) : null;
+        $password = isset($_POST['password']) ? trim($_POST['password']) : null;
 
         if (!$email || !$password){
             jsonResponse(400, false, "Email and password are required!", null, "Credentials are not provided fully.");
@@ -17,29 +18,24 @@
         $email = htmlspecialchars($email);
 
         // Check if the user is registered(email already exists)
-        $stmt = $conn->prepare("SELECT id, username, email, password, role FROM users WHERE email = :email");
-        $stmt->execute([':email' => $email]);
-
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        if(!$user){
-            jsonResponse(401, false, "Invalid credentials!", null, "Email or password is incorrect.");
-        }
-        if (!password_verify($password, $user['password'])){
+        $user = new User($conn);
+        $userData = $user->findByEmail($email);
+        if(!$userData || !password_verify($userData->getPassword(), $user['password'])){
             jsonResponse(401, false, "Invalid credentials!", null, "Email or password is incorrect.");
         }
 
         $payload = [
-            'id' => $user['id'],
-            "email" => $user['email'],
-            'role' => $user['role']
+            'id' => $userData->getId(),
+            "email" => $userData,
+            'role' => $userData->getRole()
         ];
         $token = generateToken($payload);
 
         jsonResponse(200, true, "Login successful", [
             'user' => [
-                "id" => $user['id'],
-                "username" => $user['username'],
-                "email" => $user['email'],
+                "id" => $userData->getId(),
+                "username" => $userData->getUsername(),
+                "email" => $userData->getEmail(),
             ],
             'token' => $token,
         ]);
