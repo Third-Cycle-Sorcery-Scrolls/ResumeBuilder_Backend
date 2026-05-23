@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/../../helpers/response.php';
-require_once __DIR__ . '/../../helpers/jwt-token.php';
+require_once __DIR__ . '/../helpers/response.php';
+require_once __DIR__ . '/../helpers/jwt-token.php';
 
 function authMiddleware(){
     $headers = getallheaders();

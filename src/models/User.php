@@ -23,6 +23,7 @@
                 $this->email = $data['email'];
                 $this->password = $data['password'];
                 $this->username = $data['username'];
+                $this->role = $data['role'];
                 $this->profile_picture = $data['profile_picture'];
                 return $this;
             }
@@ -38,6 +39,7 @@
                 $this->email = $data['email'];
                 $this->password = $data['password'];
                 $this->username = $data['username'];
+                $this->role = $data['role'];
                 $this->profile_picture = $data['profile_picture'];
                 return $this;
             }
@@ -55,6 +57,7 @@
                 $this->email = $data['email'];
                 $this->password = $data['password'];
                 $this->username = $data['username'];
+                $this->role = $data['role'];
                 $this->profile_picture = $data['profile_picture'];
                 return $this;
             }
@@ -71,6 +74,7 @@
                 $this->email = $data['email'];
                 $this->password = $data['password'];
                 $this->username = $data['username'];
+                $this->role = $data['role'];
                 $this->profile_picture = $data['profile_picture'];
                 return $this;
             }
@@ -85,6 +89,7 @@
 
         public function setUsername($username) {$this->username = $username;}
         public function setEmail($email) {$this->email = $email;}
+        public function setRole($role) {$this->role = $role;}
     }
 
 ?>

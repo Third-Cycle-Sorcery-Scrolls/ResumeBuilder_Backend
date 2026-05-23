@@ -20,13 +20,13 @@
         // Check if the user is registered(email already exists)
         $user = new User($conn);
         $userData = $user->findByEmail($email);
-        if(!$userData || !password_verify($userData->getPassword(), $user['password'])){
+        if(!$userData || !password_verify($password, $userData->getPassword())){
             jsonResponse(401, false, "Invalid credentials!", null, "Email or password is incorrect.");
         }
 
         $payload = [
             'id' => $userData->getId(),
-            "email" => $userData,
+            "email" => $userData->getEmail(),
             'role' => $userData->getRole()
         ];
         $token = generateToken($payload);
