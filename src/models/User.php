@@ -49,17 +49,21 @@
         public function create($username, $email, $passwordHash){
             $stmt = $this->conn->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
             $stmt->execute([':username' => $username, ':email' => $email, ':password' => $passwordHash]);
-            $data = $stmt->fetch();
-            return $data;
+            $newUserId = $this->conn->lastInsertId();
 
-            if($data){
-                $this->id = $data['id'];
-                $this->email = $data['email'];
-                $this->password = $data['password'];
-                $this->username = $data['username'];
-                $this->role = $data['role'];
-                $this->profile_picture = $data['profile_picture'];
-                return $this;
+            if($newUserId){
+                $fetchStmt = $this->conn->prepare("SELECT * FROM users WHERE id = :id");
+                $fetchStmt->execute([':id' => $newUserId]);
+                $data = $fetchStmt->fetch(PDO::FETCH_ASSOC);
+                if ($data){
+                    $this->id = $data['id'];
+                    $this->email = $data['email'];
+                    $this->password = $data['password'];
+                    $this->username = $data['username'];
+                    $this->role = $data['role'];
+                    $this->profile_picture = $data['profile_picture'];
+                    return $this;
+                }
             }
             return null;
         }

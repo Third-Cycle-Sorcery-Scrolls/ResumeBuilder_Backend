@@ -46,10 +46,10 @@
         // If it is a new user, hash the password and store it in the database
         $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 
-        if($user->create($username, $email, $passwordHash)){
+        if($userData = $user->create($username, $email, $passwordHash)){
             jsonResponse(201, true, "User registered successfully", [
                 "username" => $username,
-                "userId" => $userId,
+                "userId" => $userData->getId(),
                 "email" => $email
             ]);
 
