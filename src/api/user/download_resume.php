@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../helpers/response.php';
+require_once __DIR__ . '/../../helpers/logger.php';
 
 function escapePdfString(string $text): string {
     return str_replace(['\\', '(', ')'], ['\\\\', '\\(', '\\)'], $text);
@@ -35,9 +36,7 @@ function buildPdf(string $content): string {
 
     $xref = "xref\n0 " . (count($objects) + 1) . "\n0000000000 65535 f \n";
     foreach ($offsets as $index => $offset) {
-        if ($index === 0) {
-            continue;
-        }
+        if ($index === 0) continue;
         $xref .= sprintf('%010d 00000 n \n', $offset);
     }
 
@@ -47,86 +46,100 @@ function buildPdf(string $content): string {
     return $pdf;
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-    header('Content-Type: application/json');
-    jsonResponse(404, false, 'Route not found.', null, 'The requested endpoint does not exist.');
-}
+try {
 
-$userId = $_GET['user_id'] ?? null;
-$resumeId = $_GET['resume_id'] ?? null;
+    if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+        header('Content-Type: application/json');
+        logError($conn, "Download-resume route accessed with invalid method", __FILE__, __LINE__, null);
+        jsonResponse(404, false, 'Route not found.', null, 'The requested endpoint does not exist.');
+    }
 
-if (!$userId || !$resumeId) {
-    header('Content-Type: application/json');
-    jsonResponse(400, false, 'user_id and resume_id are required.', null, 'Missing required query parameters.');
-}
+    $userId   = $_GET['user_id'] ?? null;
+    $resumeId = $_GET['resume_id'] ?? null;
 
-$stmt = $conn->prepare('SELECT r.id, r.title, r.template, u.name AS user_name, u.email AS user_email FROM resumes r JOIN users u ON u.id = r.user_id WHERE r.id = ? AND r.user_id = ?');
-$stmt->execute([$resumeId, $userId]);
-$resume = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$userId || !$resumeId) {
+        header('Content-Type: application/json');
+        logError($conn, "Resume download failed: missing user_id or resume_id", __FILE__, __LINE__, $userId ?? null);
+        jsonResponse(400, false, 'user_id and resume_id are required.', null, 'Missing required query parameters.');
+    }
 
-if (!$resume) {
-    header('Content-Type: application/json');
-    jsonResponse(404, false, 'Resume not found.', null, 'No resume was found for the provided user_id and resume_id.');
-}
+    $stmt = $conn->prepare('
+        SELECT r.id, r.title, r.template, u.name AS user_name, u.email AS user_email
+        FROM resumes r
+        JOIN users u ON u.id = r.user_id
+        WHERE r.id = ? AND r.user_id = ?
+    ');
+    $stmt->execute([$resumeId, $userId]);
+    $resume = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$education = [];
-$work = [];
-$skills = [];
+    if (!$resume) {
+        header('Content-Type: application/json');
+        logError($conn, "Resume download failed: no resume found for user_id=$userId, resume_id=$resumeId", __FILE__, __LINE__, $userId);
+        jsonResponse(404, false, 'Resume not found.', null, 'No resume was found for the provided user_id and resume_id.');
+    }
 
-$stmt = $conn->prepare('SELECT institution, degree, field_of_study, start_date, end_date FROM education WHERE resume_id = ? ORDER BY start_date DESC');
-$stmt->execute([$resumeId]);
-$education = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conn->prepare('SELECT institution, degree, field_of_study, start_date, end_date FROM education WHERE resume_id = ? ORDER BY start_date DESC');
+    $stmt->execute([$resumeId]);
+    $education = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt = $conn->prepare('SELECT company, position, start_date, end_date, description FROM work_experience WHERE resume_id = ? ORDER BY start_date DESC');
-$stmt->execute([$resumeId]);
-$work = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conn->prepare('SELECT company, position, start_date, end_date, description FROM work_experience WHERE resume_id = ? ORDER BY start_date DESC');
+    $stmt->execute([$resumeId]);
+    $work = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt = $conn->prepare('SELECT skill_name, proficiency FROM skills WHERE resume_id = ? ORDER BY skill_name');
-$stmt->execute([$resumeId]);
-$skills = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conn->prepare('SELECT skill_name, proficiency FROM skills WHERE resume_id = ? ORDER BY skill_name');
+    $stmt->execute([$resumeId]);
+    $skills = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$lines = [];
-$lines[] = $resume['title'] ?: 'Resume';
-$lines[] = 'Generated for: ' . ($resume['user_name'] ?: $resume['user_email']);
-$lines[] = 'Template: ' . ($resume['template'] ?: 'default');
-$lines[] = str_repeat('-', 60);
-if (count($education) > 0) {
-    $lines[] = 'Education:';
-    foreach ($education as $item) {
-        $lines[] = sprintf('%s | %s (%s - %s)', $item['institution'], $item['degree'], $item['start_date'], $item['end_date']);
-        if (!empty($item['field_of_study'])) {
-            $lines[] = 'Field: ' . $item['field_of_study'];
+    $lines   = [];
+    $lines[] = $resume['title'] ?: 'Resume';
+    $lines[] = 'Generated for: ' . ($resume['user_name'] ?: $resume['user_email']);
+    $lines[] = 'Template: ' . ($resume['template'] ?: 'default');
+    $lines[] = str_repeat('-', 60);
+
+    if (count($education) > 0) {
+        $lines[] = 'Education:';
+        foreach ($education as $item) {
+            $lines[] = sprintf('%s | %s (%s - %s)', $item['institution'], $item['degree'], $item['start_date'], $item['end_date']);
+            if (!empty($item['field_of_study'])) {
+                $lines[] = 'Field: ' . $item['field_of_study'];
+            }
+            $lines[] = '';
         }
-        $lines[] = '';
     }
-}
 
-if (count($work) > 0) {
-    $lines[] = 'Work Experience:';
-    foreach ($work as $item) {
-        $lines[] = sprintf('%s | %s (%s - %s)', $item['company'], $item['position'], $item['start_date'], $item['end_date']);
-        if (!empty($item['description'])) {
-            $lines[] = 'Description: ' . $item['description'];
+    if (count($work) > 0) {
+        $lines[] = 'Work Experience:';
+        foreach ($work as $item) {
+            $lines[] = sprintf('%s | %s (%s - %s)', $item['company'], $item['position'], $item['start_date'], $item['end_date']);
+            if (!empty($item['description'])) {
+                $lines[] = 'Description: ' . $item['description'];
+            }
+            $lines[] = '';
         }
-        $lines[] = '';
     }
-}
 
-if (count($skills) > 0) {
-    $lines[] = 'Skills:';
-    foreach ($skills as $item) {
-        $lines[] = sprintf('%s - %s', $item['skill_name'], $item['proficiency']);
+    if (count($skills) > 0) {
+        $lines[] = 'Skills:';
+        foreach ($skills as $item) {
+            $lines[] = sprintf('%s - %s', $item['skill_name'], $item['proficiency']);
+        }
     }
+
+    if (count($lines) === 4) {
+        $lines[] = 'No resume details were found for this entry.';
+    }
+
+    $documentText = implode("\n", $lines);
+    $pdf = buildPdf($documentText);
+
+    header('Content-Type: application/pdf');
+    header('Content-Disposition: attachment; filename="resume_' . $resumeId . '.pdf"');
+    echo $pdf;
+    exit;
+
+} catch (Exception $e) {
+    logError($conn, $e->getMessage(), $e->getFile(), $e->getLine(), $userId ?? null);
+    header('Content-Type: application/json');
+    jsonResponse(500, false, 'Internal Server Error');
 }
-
-if (count($lines) === 4) {
-    $lines[] = 'No resume details were found for this entry.';
-}
-
-$documentText = implode("\n", $lines);
-$pdf = buildPdf($documentText);
-
-header('Content-Type: application/pdf');
-header('Content-Disposition: attachment; filename="resume_' . $resumeId . '.pdf"');
-echo $pdf;
-exit;
+?>
