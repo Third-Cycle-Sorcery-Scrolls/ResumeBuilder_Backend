@@ -3,7 +3,8 @@
     require_once __DIR__ . '/../../helpers/response.php';
     require_once __DIR__ . '/../../helpers/jwt-token.php';
     require_once __DIR__ . '/../../models/User.php';
-
+    require_once __DIR__ . '/../../services/ActivityLogger.php';
+    
     header('Content-Type: application/json');
 
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -30,6 +31,8 @@
             'role' => $userData->getRole()
         ];
         $token = generateToken($payload);
+
+        ActivityLogger::log($conn, $userData->getId(), 'login', 'user', $userData->getId(), null);
 
         jsonResponse(200, true, "Login successful", [
             'user' => [

@@ -4,6 +4,7 @@ require_once __DIR__.'/../../models/Resume.php';
 require_once __DIR__."/../../config/db.php";
 require_once '../../helpers/response.php';
 require_once '../../helpers/logger.php';
+require_once __DIR__ . '/../../services/ActivityLogger.php';
 
 try {
 
@@ -39,7 +40,7 @@ try {
 
         jsonResponse(500, false, "Could not delete resume");
     }
-
+        ActivityLogger::log($conn, null, 'resume_delete', 'resume', $id, null);
     jsonResponse(200, true, "Resume deleted");
 
 } catch (Exception $e) {
