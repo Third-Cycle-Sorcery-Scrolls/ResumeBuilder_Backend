@@ -27,6 +27,7 @@ if($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 if($_SERVER['REQUEST_METHOD'] == 'GET') {
     $resume_id = $_GET['resume_id'] ?? null;
+
     if (!$resume_id) {
         jsonResponse(400, false, "Resume ID required");
     }
@@ -36,6 +37,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET') {
         jsonResponse(404, false, "Personal info not found");
     }
     jsonResponse(200, true, "Personal info fetched", $data);
+        
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
     $resume_id = $data['resume_id'] ?? null;

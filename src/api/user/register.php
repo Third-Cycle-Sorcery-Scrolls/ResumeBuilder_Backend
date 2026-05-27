@@ -23,6 +23,7 @@
         $input = json_decode(file_get_contents('php://input'), true);
         $email = $input['email'] ?? null;
         $password = $input['password'] ?? null;
+        $name = $input['name'] ?? null;
         if (!$email || !$password){
             jsonResponse(400, false, "Email and password are required!", null, "Credentials are not provided fully.");
         }
@@ -41,13 +42,14 @@
         // If it is a new user, hash the password and store it in the database
         $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 
-        $stmt = $conn->prepare("INSERT INTO users (email, password) VALUES (?, ?)");
-        $stmt->execute([$email, $passwordHash]);
+        $stmt = $conn->prepare("INSERT INTO users (email, password, name) VALUES (?, ?, ?)");
+        $stmt->execute([$email, $passwordHash, $name]);
         $userId = $conn->lastInsertId();
 
         jsonResponse(201, true, "User registered successfully",[
             "userId" => $userId,
-            "email" => $email
+            "email" => $email,
+            "name" => $name
         ]);
 
     }

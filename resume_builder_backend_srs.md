@@ -194,6 +194,13 @@ Skills Table:
 - proficiency (VARCHAR(255))
 - created_at (TIMESTAMP)
 - updated_at (TIMESTAMP)
+
+Log Table (for tracking user actions and system events):
+- id (INT, PRIMARY KEY, AUTO_INCREMENT)
+- user_id (INT, FOREIGN KEY referencing Users(id), nullable for system events)
+- action (VARCHAR(255)) -- description of the action performed (e.g., "User registered", "Resume created", "Resume updated", etc.)
+- timestamp (TIMESTAMP) -- when the action occurred
+
 ```
 
 ### ERD Diagram:
@@ -454,3 +461,13 @@ Focus: Frontend integration, template HTML rendering, dynamic data insertion.
 - Finally, ensure that you are testing your code thoroughly before submitting it for review to catch any bugs or issues early on.
 
 **Thank you all for your hard work and dedication to this project. Let's build a great Resume Builder application together!**
+
+## New page:- Admin page
+
+### features
+
+- user analytics (number of users, active users, etc.)
+- resume analytics (number of resumes created, popular templates, etc.)
+- user management (view, edit, delete users)
+- System monitoring (server status, error logs, etc.)
+- Security management (view and manage security settings, monitor for suspicious activity)
