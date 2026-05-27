@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../../config/db.php';
+
 define('JWT_SECRET_KEY', 'your_secret');
 
 function base64UrlEncode($data){
@@ -11,29 +13,61 @@ function base64UrlDecode($data){
 }
 
 function generateToken($payload){
-    $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
-    $payload['exp'] = time() + 900;
-    $base64_header = base64UrlEncode($header);
-    $base64_payload = base64UrlEncode(json_encode($payload));
+    global $conn;
 
-    $signature = hash_hmac('sha256', "$base64_header.$base64_payload",  JWT_SECRET_KEY, true);
-    $base64_signature = base64UrlEncode($signature);
-    return "$base64_header.$base64_payload.$base64_signature";
+    try {
+        $header         = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
+        $payload['exp'] = time() + 900;
+        $base64_header  = base64UrlEncode($header);
+        $base64_payload = base64UrlEncode(json_encode($payload));
+
+        $signature        = hash_hmac('sha256', "$base64_header.$base64_payload", JWT_SECRET_KEY, true);
+        $base64_signature = base64UrlEncode($signature);
+
+        return "$base64_header.$base64_payload.$base64_signature";
+
+    } catch (Exception $e) {
+        require_once __DIR__ . '/logger.php';
+        logError($conn, "JWT generation failed: " . $e->getMessage(), $e->getFile(), $e->getLine(), null);
+        return null;
+    }
 }
 
 function verifyJWT($token){
-    $parts = explode('.', $token);
-    if(count($parts) !== 3) return null;
+    global $conn;
 
-    list($base64_header, $base64_payload, $base64_signature) = $parts;
+    try {
+        $parts = explode('.', $token);
+        if (count($parts) !== 3) {
+            require_once __DIR__ . '/logger.php';
+            logError($conn, "JWT verification failed: malformed token structure", __FILE__, __LINE__, null);
+            return null;
+        }
 
-    $signature = base64UrlDecode($base64_signature);
-    $expected_signature = hash_hmac('sha256', "$base64_header.$base64_payload", JWT_SECRET_KEY, true);
+        list($base64_header, $base64_payload, $base64_signature) = $parts;
 
-    if(!hash_equals($signature, $expected_signature)) return null;
-    $payload = json_decode(base64UrlDecode($base64_payload), true);
+        $signature          = base64UrlDecode($base64_signature);
+        $expected_signature = hash_hmac('sha256', "$base64_header.$base64_payload", JWT_SECRET_KEY, true);
 
-    if(isset($payload['exp']) && $payload['exp'] < time()) return null;
+        if (!hash_equals($signature, $expected_signature)) {
+            require_once __DIR__ . '/logger.php';
+            logError($conn, "JWT verification failed: invalid signature", __FILE__, __LINE__, null);
+            return null;
+        }
 
-    return $payload;
+        $payload = json_decode(base64UrlDecode($base64_payload), true);
+
+        if (isset($payload['exp']) && $payload['exp'] < time()) {
+            require_once __DIR__ . '/logger.php';
+            logError($conn, "JWT verification failed: token expired for user_id=" . ($payload['id'] ?? 'unknown'), __FILE__, __LINE__, $payload['id'] ?? null);
+            return null;
+        }
+
+        return $payload;
+
+    } catch (Exception $e) {
+        require_once __DIR__ . '/logger.php';
+        logError($conn, "JWT verification failed: " . $e->getMessage(), $e->getFile(), $e->getLine(), null);
+        return null;
+    }
 }
