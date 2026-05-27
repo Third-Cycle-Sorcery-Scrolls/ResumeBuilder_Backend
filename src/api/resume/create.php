@@ -4,6 +4,7 @@ require_once __DIR__.'/../../models/Resume.php';
 require_once __DIR__."/../../config/db.php";
 require_once '../../helpers/response.php';
 require_once '../../helpers/logger.php';
+require_once __DIR__ . '/../../services/ActivityLogger.php';
 
 try {
 
@@ -55,6 +56,7 @@ try {
 
         jsonResponse(500, false, "Could not create resume");
     }
+    ActivityLogger::log($conn, $user_id, 'resume_create', 'resume', $id, ['title' => $title, 'template' => $template]);
 
     jsonResponse(201, true, "Resume created", ["id" => $id]);
 
