@@ -2,10 +2,15 @@
 
 require_once __DIR__.'/../../models/Resume.php';
 require_once __DIR__."/../../config/db.php";
-require_once '../../helpers/response.php';
-require_once '../../helpers/logger.php';
+require_once __DIR__ . '/../../helpers/response.php';
+require_once __DIR__ . '/../../helpers/logger.php';
 
 try {
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
+        logError($conn, "Resume update route accessed with invalid method", __FILE__, __LINE__, null);
+        jsonResponse(404, false, 'Route not found', null, 'The requested endpoint does not exist.');
+    }
 
     $id = $_GET['id'] ?? null;
 
