@@ -3,6 +3,7 @@
     require_once __DIR__ . '/../../config/db.php';
     require_once __DIR__ . '/../../helpers/response.php';
     require_once __DIR__ . '/../../helpers/auth.php';
+    require_once __DIR__ . '/../../helpers/Logger.php';
     
     header('Content-Type: application/json');
     // CORS
@@ -61,6 +62,9 @@
         $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->execute([$email]);
         if ($stmt->rowCount() > 0){
+            Logger::warning(Logger::CAT_AUTH, 'AUTH_REGISTER_FAILED', 'Registration failed: email already exists', [
+                'email' => $email,
+            ]);
             jsonResponse(401, false, "Email already exists!", null, "A user with this email already exists.");
             exit;
         }
@@ -73,6 +77,12 @@
 
         // Generate authentication token
         $token = createToken($userId, $email, 'user');
+
+        Logger::info(Logger::CAT_AUTH, 'AUTH_REGISTER', 'New user registered', [
+            'user_id' => $userId,
+            'email'   => $email,
+            'name'    => $name,
+        ]);
 
         jsonResponse(201, true, "User registered successfully",[
             "userId" => $userId,

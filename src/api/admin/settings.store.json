@@ -1,5 +1,5 @@
 {
     "siteTitle": "Resume Builder",
-    "allowRegistration": false,
+    "allowRegistration": true,
     "maintenanceMode": false
 }

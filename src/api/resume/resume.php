@@ -5,6 +5,7 @@ require_once __DIR__."/../../config/db.php";
 require_once '../../helpers/debug.php';
 require_once '../../helpers/response.php';
 require_once '../../helpers/auth.php';
+require_once '../../helpers/Logger.php';
 // CORS
 header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT");
@@ -49,6 +50,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $resume = new Resume($conn);
     $id = $resume->create($user_id, $title, $template);
     
+    Logger::info(Logger::CAT_RESUME, 'RESUME_CREATE', 'Resume created', [
+        'user_id'      => $userId,
+        'resume_id'    => $id,
+        'resume_title' => $title,
+        'template'     => $template,
+    ]);
+
     jsonResponse(201, true, "Resume created", ["id" => $id]);
 }
 elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['user_id']) && isset($_GET['resume_id'])){ 
@@ -104,6 +112,10 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['user_id']) && isset(
 
     $resumeModel = new Resume($conn);
     if ($resumeModel->delete($id)) {
+        Logger::info(Logger::CAT_RESUME, 'RESUME_DELETE', 'Resume deleted', [
+            'user_id'   => $userId,
+            'resume_id' => $id,
+        ]);
         jsonResponse(200, true, "Resume deleted");
     } else {
         jsonResponse(500, false, "Failed to delete resume");
@@ -130,6 +142,12 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['user_id']) && isset(
 
     $resume = new Resume($conn);
     if ($resume->update($id, $title, $template)) {
+        Logger::info(Logger::CAT_RESUME, 'RESUME_UPDATE', 'Resume updated', [
+            'user_id'      => $userId,
+            'resume_id'    => $id,
+            'resume_title' => $title,
+            'template'     => $template,
+        ]);
         jsonResponse(200, true, "Resume updated");
     } else {
         jsonResponse(500, false, "Failed to update resume");

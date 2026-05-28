@@ -3,6 +3,7 @@ require_once __DIR__  . '/../../config/db.php';
 require_once __DIR__ . '/../../helpers/response.php';
 require_once __DIR__ . '/../../helpers/debug.php';
 require_once __DIR__ . '/../../helpers/auth.php';
+require_once __DIR__ . '/../../helpers/Logger.php';
 
 // CORS
 header("Access-Control-Allow-Origin: http://localhost:3000");
@@ -41,10 +42,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$user || !password_verify($password, $user['password'])) {
+        Logger::warning(Logger::CAT_AUTH, 'AUTH_LOGIN_FAILED', 'Login failed: invalid credentials', [
+            'email' => $email,
+        ]);
         jsonResponse(400, false, "Invalid credentials!", null, "Wrong email or password");
     }
 
     if (in_array($user['role'] ?? 'user', ['denied', 'banned', 'disabled'], true)) {
+        Logger::security('SECURITY_ACCOUNT_BLOCKED', 'Login attempt on blocked account', [
+            'user_id' => $user['id'],
+            'email'   => $email,
+        ]);
         jsonResponse(403, false, "Access denied", null, "This account has been disabled by an administrator");
     }
 
@@ -52,6 +60,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Generate authentication token
     $token = createToken($user['id'], $user['email'], $user['role'] ?? 'user');
+
+    Logger::info(Logger::CAT_AUTH, 'AUTH_LOGIN', 'User logged in successfully', [
+        'user_id' => $user['id'],
+        'email'   => $email,
+        'role'    => $user['role'] ?? 'user',
+    ]);
 
     jsonResponse(200, true, "Login successful", [
         "userId" => $user['id'],

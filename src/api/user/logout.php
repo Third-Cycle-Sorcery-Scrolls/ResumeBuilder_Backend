@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../helpers/response.php';
 require_once __DIR__ . '/../../helpers/auth.php';
+require_once __DIR__ . '/../../helpers/Logger.php';
 
 // CORS
 header("Access-Control-Allow-Origin: http://localhost:3000");
@@ -20,6 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         // Verify user is authenticated
         $user = authenticateUser();
+
+        Logger::info(Logger::CAT_AUTH, 'AUTH_LOGOUT', 'User logged out', [
+            'user_id' => $user['userId'] ?? null,
+            'email'   => $user['email']  ?? null,
+        ]);
         
         // Since we're using token-based authentication (stateless),
         // the logout is handled on the client side by removing the token.

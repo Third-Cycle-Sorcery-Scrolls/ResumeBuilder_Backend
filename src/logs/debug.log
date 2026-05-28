@@ -2594,3 +2594,619 @@ Array
 )
 
 ==============================
+
+==============================
+[2026-05-28 12:26:17] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 12:26:17] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 12:26:25] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 12:26:25] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 12:26:28] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 12:26:28] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 12:31:19] POST request in /api/resume/resume.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-28 12:31:20] POST request in /api/resume/skills/add.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-28 12:32:49] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 12:32:49] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 12:32:53] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 12:32:53] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 12:32:57] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 12:32:57] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 12:53:48] POST request in /api/resume/resume.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-28 12:53:48] POST request in /api/resume/skills/add.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-28 13:04:13] User logged in: alexaa@gmail.com
+Array
+(
+    [id] => 22
+    [email] => alexaa@gmail.com
+    [password] => $2y$10$PaI9nhqR7BcA0CkekQvhhOvtQ5172I7inJuxDcWyr7nYCm5GhfEsC
+    [role] => user
+)
+
+==============================
+
+==============================
+[2026-05-28 13:04:21] POST request in /api/resume/resume.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-28 13:04:21] POST request in /api/resume/skills/add.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-28 13:04:46] POST request in /api/resume/resume.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-28 13:04:46] POST request in /api/resume/resume.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-28 13:04:46] POST request in /api/resume/resume.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-28 13:04:46] POST request in /api/resume/resume.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-28 13:04:46] POST request in /api/resume/skills/add.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-28 13:04:46] POST request in /api/resume/skills/add.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-28 13:04:46] POST request in /api/resume/skills/add.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-28 13:04:46] POST request in /api/resume/skills/add.php
+Array
+(
+)
+
+==============================
+
+==============================
+[2026-05-28 13:09:05] User logged in: alexaa@gmail.com
+Array
+(
+    [id] => 22
+    [email] => alexaa@gmail.com
+    [password] => $2y$10$PaI9nhqR7BcA0CkekQvhhOvtQ5172I7inJuxDcWyr7nYCm5GhfEsC
+    [role] => user
+)
+
+==============================
+
+==============================
+[2026-05-28 13:09:05] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:09:06] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:24:30] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:24:30] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:24:41] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:24:41] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:26:22] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:26:22] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:26:26] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:26:26] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:27:08] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:27:08] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:32:02] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:32:02] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:32:21] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:32:21] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:32:36] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:32:36] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:32:48] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:32:48] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:32:55] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:32:55] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:34:05] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:34:05] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:37:33] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:37:33] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:37:46] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:37:46] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:39:44] User logged in: alexaa@gmail.com
+Array
+(
+    [id] => 22
+    [email] => alexaa@gmail.com
+    [password] => $2y$10$PaI9nhqR7BcA0CkekQvhhOvtQ5172I7inJuxDcWyr7nYCm5GhfEsC
+    [role] => user
+)
+
+==============================
+
+==============================
+[2026-05-28 13:40:11] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:40:11] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:53:43] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:53:43] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:54:42] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:54:42] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:57:58] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:57:58] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:58:04] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:58:04] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:58:07] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================
+
+==============================
+[2026-05-28 13:58:07] GET request in /api/admin/index.php for dashboard analytics
+Array
+(
+    [type] => dashboard
+)
+
+==============================

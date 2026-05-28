@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../helpers/response.php';
 require_once __DIR__ . '/../../helpers/auth.php';
+require_once __DIR__ . '/../../helpers/Logger.php';
 require_once __DIR__ . '/../../models/Resume.php';
 
 // CORS
@@ -192,18 +193,46 @@ try {
     // Try to use TCPDF if available, otherwise return text
     if (file_exists(__DIR__ . '/../../../../vendor/autoload.php')) {
         try {
+            Logger::info(Logger::CAT_RESUME, 'RESUME_EXPORT', 'Resume exported as PDF', [
+                'user_id'      => $userId,
+                'resume_id'    => $resumeId,
+                'resume_title' => $resumeData['title'] ?? null,
+                'template'     => $resumeData['template'] ?? null,
+                'format'       => 'pdf',
+            ]);
             generatePdfWithTCPDF($resumeData, $textContent);
         } catch (Exception $e) {
+            Logger::error(Logger::CAT_ERROR, 'PDF_GENERATION_FAILED', 'PDF generation failed, falling back to text', [
+                'user_id'   => $userId,
+                'resume_id' => $resumeId,
+                'message'   => $e->getMessage(),
+                'file'      => $e->getFile(),
+                'line'      => $e->getLine(),
+            ]);
             // Fall back to text if TCPDF fails
             returnTextOutput($textContent);
         }
     } else {
+        Logger::info(Logger::CAT_RESUME, 'RESUME_EXPORT', 'Resume exported as text', [
+            'user_id'      => $userId,
+            'resume_id'    => $resumeId,
+            'resume_title' => $resumeData['title'] ?? null,
+            'template'     => $resumeData['template'] ?? null,
+            'format'       => 'text',
+        ]);
         // No TCPDF, return as text
         returnTextOutput($textContent);
     }
     exit();
     
 } catch (Exception $e) {
+    Logger::error(Logger::CAT_ERROR, 'API_REQUEST_FAILED', 'Resume download endpoint failed', [
+        'user_id'   => $userId ?? null,
+        'resume_id' => $resumeId ?? null,
+        'message'   => $e->getMessage(),
+        'file'      => $e->getFile(),
+        'line'      => $e->getLine(),
+    ]);
     header('Content-Type: application/json');
     jsonResponse(500, false, 'Error generating resume', null, $e->getMessage());
     exit();

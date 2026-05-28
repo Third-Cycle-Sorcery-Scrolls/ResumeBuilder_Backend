@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     }
 
     if ($type == "users") {
-        $sql = $conn->prepare("SELECT id, name, email,role FROM users");
+        $sql = $conn->prepare("SELECT id, name, email,role,profile_picture FROM users");
         $sql->execute();
         $data = $sql->fetchAll(PDO::FETCH_ASSOC);
         jsonResponse(200, true, "Users fetched", $data);
