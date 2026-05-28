@@ -16,13 +16,14 @@ try {
 
     //Method check
     if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
-        jsonResponse(405, false, "Method not allowed");
+        jsonResponse(404, false, "Method not allowed");
     }
 
     //Get skill ID
     $id = $_GET['id'] ?? null;
 
     if (!$id || !is_numeric($id)) {
+        logError($conn, "Skill update failed: missing or invalid skill_id", __FILE__, __LINE__, null);
         jsonResponse(400, false, "Valid skill ID is required");
     }
 
@@ -30,6 +31,7 @@ try {
     $data = json_decode(file_get_contents("php://input"), true);
 
     if (!$data) {
+        logError($conn, "Skill update failed: invalid JSON input", __FILE__, __LINE__, null);
         jsonResponse(400, false, "Invalid JSON");
     }
 
@@ -40,6 +42,7 @@ try {
     if (!isset($skill_name, $proficiency) ||
         trim($skill_name) === "" ||
         trim($proficiency) === "") {
+        logError($conn, "Skill update failed: missing fields for skill_id=$id", __FILE__, __LINE__, null);
         jsonResponse(400, false, "All fields are required");
     }
 
@@ -61,10 +64,7 @@ try {
 
     if (!$stmt->fetch()) {
 
-        logError(
-            $conn,
-            "Unauthorized update attempt for skill_id=$id by user_id=$user_id"
-        );
+        logError($conn, "Unauthorized update attempt for skill_id=$id by user_id=$user_id", __FILE__, __LINE__, $user_id);
 
         jsonResponse(403, false, "You do not have permission to update this skill");
     }
@@ -78,10 +78,7 @@ try {
 
     } else {
 
-        logError(
-            $conn,
-            "Skill update failed for skill_id=$id"
-        );
+        logError($conn, "Skill update failed for skill_id=$id, user_id=$user_id", __FILE__, __LINE__, $user_id);
 
         jsonResponse(500, false, "Could not update skill");
     }

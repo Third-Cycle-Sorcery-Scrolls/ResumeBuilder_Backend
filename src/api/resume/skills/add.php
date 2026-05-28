@@ -15,7 +15,7 @@ header("Access-Control-Allow-Methods: POST");
 try {
 
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        jsonResponse(405, false, "Method not allowed");
+        jsonResponse(404, false, "Method not allowed");
     }
 
     // Get JSON input
@@ -38,8 +38,7 @@ try {
     // Ownership check (future-ready)
     $user = authMiddleware();
     $user_id = $user['id'];
-    logError($conn, "DEBUG: resume_id=$resume_id, user_id=$user_id");
-
+    
     $stmt = $conn->prepare("SELECT id FROM resumes WHERE id = :id AND user_id = :user_id");
     $stmt->execute([
         ':id' => $resume_id,
@@ -48,7 +47,7 @@ try {
 
     if (!$stmt->fetch()) {
 
-        logError($conn, "Unauthorized access attempt: user=$user_id, resume_id=$resume_id");
+        logError($conn, "Unauthorized access attempt: user=$user_id, resume_id=$resume_id", __FILE__, __LINE__, $user_id);
 
         jsonResponse(403, false, "You do not have permission to modify this resume");
     }
@@ -59,7 +58,7 @@ try {
         jsonResponse(201, true, "Skill added successfully");
     } else {
 
-        logError($conn, "Skill insert failed (unknown reason)");
+        logError($conn, "Skill insert failed for resume_id=$resume_id, user_id=$user_id", __FILE__, __LINE__, $user_id);
 
         jsonResponse(500, false, "Could not add skill");
     }

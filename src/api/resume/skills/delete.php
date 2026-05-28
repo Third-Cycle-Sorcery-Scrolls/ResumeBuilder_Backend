@@ -16,13 +16,14 @@ try {
 
     // Method check
     if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
-        jsonResponse(405, false, "Method not allowed");
+        jsonResponse(404, false, "Method not allowed");
     }
 
     // Get skill ID
     $id = $_GET['id'] ?? null;
 
     if (!$id || !is_numeric($id)) {
+        logError($conn, "Skill delete failed: missing or invalid skill_id", __FILE__, __LINE__, null);
         jsonResponse(400, false, "Valid skill ID is required");
     }
 
@@ -44,10 +45,7 @@ try {
 
     if (!$stmt->fetch()) {
 
-        logError(
-            $conn,
-            "Unauthorized delete attempt for skill_id=$id by user_id=$user_id"
-        );
+        logError($conn, "Unauthorized delete attempt for skill_id=$id by user_id=$user_id", __FILE__, __LINE__, $user_id);
 
         jsonResponse(403, false, "You do not have permission to delete this skill");
     }
@@ -61,10 +59,7 @@ try {
 
     } else {
 
-        logError(
-            $conn,
-            "Skill delete failed for skill_id=$id"
-        );
+        logError($conn, "Skill delete failed for skill_id=$id, user_id=$user_id", __FILE__, __LINE__, $user_id);
 
         jsonResponse(500, false, "Could not delete skill");
     }
