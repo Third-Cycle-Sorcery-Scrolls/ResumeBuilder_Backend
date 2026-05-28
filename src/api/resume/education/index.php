@@ -1,28 +1,11 @@
 <?php
 
-
-    // // EDUCATION
-    // $pdo->exec("
-    //     CREATE TABLE IF NOT EXISTS education (
-    //         id INT AUTO_INCREMENT PRIMARY KEY,
-    //         resume_id INT,
-    //         institution VARCHAR(255),
-    //         degree VARCHAR(255),
-    //         field_of_study VARCHAR(255),
-    //         start_date DATE,
-    //         end_date DATE,
-    //         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    //         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    //         FOREIGN KEY (resume_id) REFERENCES resumes(id) ON DELETE CASCADE
-    //     );
-    // ");
     require_once "../../../config/db.php";
     require_once "../../../models/Education.php";
     require_once "../../../helpers/response.php";
     require_once "../../../helpers/debug.php";
-
-    // Set CORS headers for React frontend
-    header("Access-Control-Allow-Origin: *");
+    require_once "../../../helpers/auth.php";
+    require_once "../../../models/Resume.php";
 
     // CORS
     header("Access-Control-Allow-Origin: http://localhost:3000");
@@ -36,6 +19,15 @@
         exit();
     }
 
+    // Authenticate user for all requests
+    try {
+        $user = authenticateUser();
+        $userId = $user['userId'];
+    } catch (Exception $e) {
+        jsonResponse(401, false, "Unauthorized: Authentication required");
+        exit();
+    }
+
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $data = json_decode(file_get_contents("php://input"), true);
 
@@ -44,7 +36,16 @@
         if(!$resume_id || !$education) {
             jsonResponse(400, false, "Resume ID and education data are required");
         }
-
+        
+        // Verify user owns the resume
+        $stmt = $conn->prepare("SELECT user_id FROM resumes WHERE id = ?");
+        $stmt->execute([$resume_id]);
+        $resume = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$resume || !verifyResourceOwnership($userId, $resume['user_id'])) {
+            jsonResponse(403, false, "Forbidden: Cannot modify another user's resume data");
+            exit();
+        }
 
         $edu_instance = new Education($conn);
 

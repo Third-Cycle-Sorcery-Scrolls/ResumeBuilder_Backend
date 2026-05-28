@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__.'/../../models/Project.php';
 require_once __DIR__."/../../config/db.php";
-
-require '../../helpers/response.php';
+require_once __DIR__.'/../../helpers/response.php';
+require_once __DIR__.'/../../helpers/auth.php';
 // CORS
 header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT");
@@ -15,32 +15,51 @@ if($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
+// Authenticate user for all requests
+try {
+    $user = authenticateUser();
+    $userId = $user['userId'];
+} catch (Exception $e) {
+    jsonResponse(401, false, "Unauthorized: Authentication required");
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $resume_id = $_GET['resume_id'] ?? null;
     if (!$resume_id) {
         jsonResponse(400, false, "Resume ID required");
     }
+    
+    // Verify user owns the resume
+    $stmt = $conn->prepare("SELECT user_id FROM resumes WHERE id = ?");
+    $stmt->execute([$resume_id]);
+    $resume = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$resume || !verifyResourceOwnership($userId, $resume['user_id'])) {
+        jsonResponse(403, false, "Forbidden: Cannot access another user's resume data");
+        exit();
+    }
+    
     $project = new Project($conn);
     $data = $project->getByResumeId($resume_id);
     jsonResponse(200, true, "Projects fetched", $data);
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
-//     projects
-// : 
-// [{id: "proj_1", title: "LocalMed",…}, {id: "proj_2", title: "Task Manager API",…}]
-// 0
-// : 
-// {id: "proj_1", title: "LocalMed",…}
-// 1
-// : 
-// {id: "proj_2", title: "Task Manager API",…}
-// resume_id
-// : 
-// "65"
     $data = json_decode(file_get_contents("php://input"), true);
     $resume_id = $data['resume_id'] ?? null;
     if (!$resume_id) {
         jsonResponse(400, false, "Resume ID required");
     }
+    
+    // Verify user owns the resume
+    $stmt = $conn->prepare("SELECT user_id FROM resumes WHERE id = ?");
+    $stmt->execute([$resume_id]);
+    $resume = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$resume || !verifyResourceOwnership($userId, $resume['user_id'])) {
+        jsonResponse(403, false, "Forbidden: Cannot modify another user's resume data");
+        exit();
+    }
+    
     if (!isset($data['projects']) || !is_array($data['projects'])) {
         jsonResponse(400, false, "Projects array required");
     }

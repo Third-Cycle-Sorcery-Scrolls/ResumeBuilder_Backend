@@ -3,7 +3,8 @@
 require_once __DIR__.'/../../models/Resume.php';
 require_once __DIR__."/../../config/db.php";
 require_once '../../helpers/debug.php';
-require '../../helpers/response.php';
+require_once '../../helpers/response.php';
+require_once '../../helpers/auth.php';
 // CORS
 header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT");
@@ -17,8 +18,14 @@ if($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// var_dump($_SERVER['REQUEST_METHOD']);
-// die();
+// Authenticate user for all requests except OPTIONS
+try {
+    $user = authenticateUser();
+    $userId = $user['userId'];
+} catch (Exception $e) {
+    jsonResponse(401, false, "Unauthorized: Authentication required");
+    exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     debug("POST request in /api/resume/resume.php", $_POST);
@@ -31,6 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!$title || !$template || !$user_id) {
         jsonResponse(400, false, "All fields are required");
     }
+    
+    // Verify user owns the resource
+    if (!verifyResourceOwnership($userId, $user_id)) {
+        jsonResponse(403, false, "Forbidden: Cannot create resume for another user");
+        exit();
+    }
     // echo "creating template";
     
     $resume = new Resume($conn);
@@ -40,22 +53,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['user_id']) && isset($_GET['resume_id'])){ 
     debug("GET request in /api/resume/resume.php", $_GET);
-    $user = $_GET['user_id'];
+    $requestUserId = $_GET['user_id'];
     $resume_id = $_GET['resume_id'];
+    
+    // Verify user can only access their own resumes
+    if (!verifyResourceOwnership($userId, $requestUserId)) {
+        jsonResponse(403, false, "Forbidden: Cannot access another user's resume");
+        exit();
+    }
 
     $resume = new Resume($conn);
-
     $resume = $resume->getById($resume_id);
 
     jsonResponse(200, true, "Resume fetched successfully", $resume);
 }elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['user_id'])) {
     debug("GET request in /api/resume/resume.php by user ID: " . $_GET['user_id'], $_GET);
-       $user = $_GET['user_id'];
-        $resume = new Resume($conn);
+    $requestUserId = $_GET['user_id'];
+    
+    // Verify user can only access their own resumes
+    if (!verifyResourceOwnership($userId, $requestUserId)) {
+        jsonResponse(403, false, "Forbidden: Cannot access another user's resumes");
+        exit();
+    }
+    
+    $resume = new Resume($conn);
+    $resume = $resume->getAllResumesByUserIdWithMetaData($requestUserId);
 
-        $resume = $resume->getAllResumesByUserIdWithMetaData($user);
-
-        jsonResponse(200, true, "Resumes fetched successfully", $resume);
+    jsonResponse(200, true, "Resumes fetched successfully", $resume);
 }  elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     $data = json_decode(file_get_contents("php://input"), true);
     
@@ -67,15 +91,24 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['user_id']) && isset(
     if (!$id) {
         jsonResponse(400, false, "ID required");
     }
+    
+    // Verify user owns the resume before deleting
+    $stmt = $conn->prepare("SELECT user_id FROM resumes WHERE id = ?");
+    $stmt->execute([$id]);
+    $resume = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$resume || !verifyResourceOwnership($userId, $resume['user_id'])) {
+        jsonResponse(403, false, "Forbidden: Cannot delete another user's resume");
+        exit();
+    }
 
-    $resume = new Resume($conn);
-    if ($resume->delete($id)) {
+    $resumeModel = new Resume($conn);
+    if ($resumeModel->delete($id)) {
         jsonResponse(200, true, "Resume deleted");
     } else {
         jsonResponse(500, false, "Failed to delete resume");
     }
 }elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
-    debug("PUT request in /api/resume/resume.php for resume ID: " . ($data['resume_id'] ?? null), $_PUT);
     $data = json_decode(file_get_contents("php://input"), true);
     $id = $data['resume_id'] ?? null;
     $title = $data['title'] ?? null;
@@ -83,6 +116,16 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['user_id']) && isset(
 
     if (!$id || !$title || !$template) {
         jsonResponse(400, false, "All fields are required");
+    }
+    
+    // Verify user owns the resume before updating
+    $stmt = $conn->prepare("SELECT user_id FROM resumes WHERE id = ?");
+    $stmt->execute([$id]);
+    $resume = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$resume || !verifyResourceOwnership($userId, $resume['user_id'])) {
+        jsonResponse(403, false, "Forbidden: Cannot update another user's resume");
+        exit();
     }
 
     $resume = new Resume($conn);

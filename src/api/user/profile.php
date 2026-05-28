@@ -1,8 +1,7 @@
 <?php
 require_once __DIR__."/../../config/db.php";
-
-
-require '../../helpers/response.php';
+require_once __DIR__.'/../../helpers/response.php';
+require_once __DIR__.'/../../helpers/auth.php';
 header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -11,6 +10,15 @@ header("Content-Type: application/json");
 require_once '../../helpers/debug.php';
 if($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
+    exit();
+}
+
+// Authenticate user for all requests
+try {
+    $user = authenticateUser();
+    $userId = $user['userId'];
+} catch (Exception $e) {
+    jsonResponse(401, false, "Unauthorized: Authentication required");
     exit();
 }
 
@@ -25,6 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     if (!$user_id) {
         jsonResponse(400, false, "User ID required");
+    }
+    
+    // Verify user can only access their own profile
+    if (!verifyResourceOwnership($userId, $user_id)) {
+        jsonResponse(403, false, "Forbidden: Cannot access another user's profile");
+        exit();
     }
     $sql = $conn->prepare("SELECT id, name, email, profile_picture FROM users WHERE id = ?");
     $sql->execute([$user_id]);

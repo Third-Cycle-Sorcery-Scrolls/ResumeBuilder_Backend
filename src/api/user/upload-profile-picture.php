@@ -1,10 +1,10 @@
 <?php
-	
 	ob_start();
 	require_once __DIR__ . '/../../config/db.php';
 	ob_end_clean();
 
 	require_once __DIR__ . '/../../helpers/response.php';
+	require_once __DIR__ . '/../../helpers/auth.php';
 
 	header('Content-Type: application/json');
 
@@ -12,9 +12,24 @@
 		jsonResponse(404, false, 'Route not found', null, 'The requested endpoint does not exist.');
 	}
 
-	$userId = $_POST['user_id'] ?? null;
-	if (!$userId || !ctype_digit((string)$userId)) {
+	// Authenticate user
+	try {
+		$user = authenticateUser();
+		$userId = $user['userId'];
+	} catch (Exception $e) {
+		jsonResponse(401, false, "Unauthorized: Authentication required");
+		exit();
+	}
+
+	$requestUserId = $_POST['user_id'] ?? null;
+	if (!$requestUserId || !ctype_digit((string)$requestUserId)) {
 		jsonResponse(400, false, 'Valid user_id is required.', null, 'Missing or invalid user_id.');
+	}
+	
+	// Verify user can only upload their own profile picture
+	if (!verifyResourceOwnership($userId, $requestUserId)) {
+		jsonResponse(403, false, "Forbidden: Cannot upload profile picture for another user");
+		exit();
 	}
 
 	if (!isset($_FILES['profile_picture'])) {

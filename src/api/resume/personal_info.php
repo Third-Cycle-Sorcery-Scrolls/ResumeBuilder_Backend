@@ -2,8 +2,9 @@
 // personal_info.php
 require_once __DIR__.'/../../models/PersonalInfo.php';
 require_once __DIR__."/../../config/db.php";
-
-require '../../helpers/response.php';
+require_once __DIR__.'/../../helpers/response.php';
+require_once __DIR__.'/../../helpers/auth.php';
+require_once __DIR__.'/../../models/Resume.php';
 // CORS
 header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT");
@@ -22,6 +23,15 @@ header("Content-Type: application/json");
 // - photo_url (VARCHAR(255)) (optional, URL or path to the uploaded profile picture)
 if($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
+    exit();
+}
+
+// Authenticate user for all requests
+try {
+    $user = authenticateUser();
+    $userId = $user['userId'];
+} catch (Exception $e) {
+    jsonResponse(401, false, "Unauthorized: Authentication required");
     exit();
 }
 

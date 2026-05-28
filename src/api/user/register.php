@@ -2,9 +2,8 @@
     // Importing db connection and response helper
     require_once __DIR__ . '/../../config/db.php';
     require_once __DIR__ . '/../../helpers/response.php';
-
-    require_once './../../config/db.php';
-    require_once './../../helpers/response.php';
+    require_once __DIR__ . '/../../helpers/auth.php';
+    
     header('Content-Type: application/json');
     // CORS
     header("Access-Control-Allow-Origin: http://localhost:3000");
@@ -18,7 +17,33 @@
         http_response_code(200);
         exit();
     }
+
+    $settingsFile = __DIR__ . '/../admin/settings.store.json';
+    $defaultSettings = [
+        'allowRegistration' => true,
+    ];
+
+    $readSettings = function ($file, $defaults) {
+        if (!file_exists($file)) {
+            return $defaults;
+        }
+
+        $decoded = json_decode(file_get_contents($file), true);
+        if (!is_array($decoded)) {
+            return $defaults;
+        }
+
+        return array_merge($defaults, $decoded);
+    };
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+        $settings = $readSettings($settingsFile, $defaultSettings);
+
+        if (!($settings['allowRegistration'] ?? true)) {
+            jsonResponse(403, false, 'Registration is currently disabled by the administrator');
+            exit();
+        }
+
         // Get the input data
         $input = json_decode(file_get_contents('php://input'), true);
         $email = $input['email'] ?? null;
@@ -46,10 +71,15 @@
         $stmt->execute([$email, $passwordHash, $name]);
         $userId = $conn->lastInsertId();
 
+        // Generate authentication token
+        $token = createToken($userId, $email, 'user');
+
         jsonResponse(201, true, "User registered successfully",[
             "userId" => $userId,
             "email" => $email,
-            "name" => $name
+            "name" => $name,
+            "token" => $token,
+            "role" => "user"
         ]);
 
     }

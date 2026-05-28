@@ -2,6 +2,7 @@
 require_once __DIR__  . '/../../config/db.php';
 require_once __DIR__ . '/../../helpers/response.php';
 require_once __DIR__ . '/../../helpers/debug.php';
+require_once __DIR__ . '/../../helpers/auth.php';
 require_once __DIR__ . '/../../models/User.php';
 
 // CORS
@@ -17,17 +18,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
+// Authenticate user for all requests
+try {
+    $user = authenticateUser();
+    $userId = $user['userId'];
+} catch (Exception $e) {
+    jsonResponse(401, false, "Unauthorized: Authentication required");
+    exit();
+}
+
  //analytics:- by user id
 //total_resumes,last_updated,most used template
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $userId = $_GET['userId'] ?? null;
+    $requestUserId = $_GET['userId'] ?? null;
 
-    if (!$userId) {
+    if (!$requestUserId) {
         jsonResponse(400, false, "User ID is required!", null, "Missing userId parameter");
     }
+    
+    // Verify user can only access their own analytics
+    if (!verifyResourceOwnership($userId, $requestUserId)) {
+        jsonResponse(403, false, "Forbidden: Cannot access another user's analytics");
+        exit();
+    }
 
-    $user = new User($conn);
-    $analytics = $user->getAnalytics($userId);
+    $userModel = new User($conn);
+    $analytics = $userModel->getAnalytics($requestUserId);
 
     if ($analytics) {
         jsonResponse(200, true, "User analytics retrieved successfully", $analytics);

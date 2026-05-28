@@ -2,6 +2,7 @@
 require_once __DIR__  . '/../../config/db.php';
 require_once __DIR__ . '/../../helpers/response.php';
 require_once __DIR__ . '/../../helpers/debug.php';
+require_once __DIR__ . '/../../helpers/auth.php';
 
 // CORS
 header("Access-Control-Allow-Origin: http://localhost:3000");
@@ -43,12 +44,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         jsonResponse(400, false, "Invalid credentials!", null, "Wrong email or password");
     }
 
+    if (in_array($user['role'] ?? 'user', ['denied', 'banned', 'disabled'], true)) {
+        jsonResponse(403, false, "Access denied", null, "This account has been disabled by an administrator");
+    }
+
     debug("User logged in: " . $user['email'], $user);
+
+    // Generate authentication token
+    $token = createToken($user['id'], $user['email'], $user['role'] ?? 'user');
 
     jsonResponse(200, true, "Login successful", [
         "userId" => $user['id'],
         "email" => $user['email'],
-        "role" => $user['role'] ?? 'user'
+        "role" => $user['role'] ?? 'user',
+        "token" => $token
     ]);
 
 } else {

@@ -1,0 +1,27 @@
+{
+  "name": "resume-builder/backend",
+  "description": "PHP Backend for Resume Builder Application",
+  "type": "project",
+  "require": {
+    "php": ">=7.4",
+    "tecnickcom/tcpdf": "^6.7"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "ResumeBuilder\\": "src/"
+    },
+    "files": [
+      "src/helpers/response.php",
+      "src/helpers/auth.php",
+      "src/helpers/debug.php"
+    ]
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true
+    }
+  }
+}

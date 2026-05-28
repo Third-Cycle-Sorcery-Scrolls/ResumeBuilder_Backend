@@ -3,10 +3,7 @@ require_once "../../../config/db.php";
 require_once "../../../models/Skill.php";
 require_once "../../../helpers/response.php";
 require_once "../../../helpers/debug.php";
-
-// Set CORS headers for React frontend
-header("Access-Control-Allow-Origin: *");
-
+require_once "../../../helpers/auth.php";
 
 // CORS
 header("Access-Control-Allow-Origin: http://localhost:3000");
@@ -20,6 +17,15 @@ if($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
+// Authenticate user for all requests
+try {
+    $user = authenticateUser();
+    $userId = $user['userId'];
+} catch (Exception $e) {
+    jsonResponse(401, false, "Unauthorized: Authentication required");
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     debug("POST request in /api/resume/skills/add.php", $_POST);
@@ -28,10 +34,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $resume_id = $data['resume_id'] ?? null;
     $skills = $data['skills'] ?? null;
-    // $proficiency = $data['proficiency'] ?? null;
     
     if (!$resume_id) {
-        jsonResponse(400, false, "Missing required fields: resume_id, skill_name, or proficiency");
+        jsonResponse(400, false, "Missing required fields: resume_id");
+        exit();
+    }
+    
+    // Verify user owns the resume
+    $stmt = $conn->prepare("SELECT user_id FROM resumes WHERE id = ?");
+    $stmt->execute([$resume_id]);
+    $resume = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$resume || !verifyResourceOwnership($userId, $resume['user_id'])) {
+        jsonResponse(403, false, "Forbidden: Cannot modify another user's resume data");
         exit();
     }
     
