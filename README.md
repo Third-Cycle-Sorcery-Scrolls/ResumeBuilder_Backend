@@ -379,8 +379,8 @@ php -S localhost:8000
 | Alehegne Geta | Alehegne | ETS0130/16 |
 | Amanawit Behailu | Amanawit22 | ETS0135/16 |
 | Amanuel Ayele | Manu3lde | ETS0140/16 |
-| Amanuel Getachew | Amanuel-Getachew-K | ETS0148/16 |
-| Amanuel Habtamu | AmanuelHab | ETS0149/16 |
+| Amanuel Getachew | Amanuel-Getachew-K | ETS0147/16 |
+| Amanuel Habtamu | AmanuelHab | ETS0148/16 |
 
 ---
 
